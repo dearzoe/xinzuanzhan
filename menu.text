@@ -1,0 +1,23 @@
+  <!--<el-menu theme="dark" :default-active="activeIndex" :default-openeds="openedsIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>-->
+    <!--<el-submenu index="1">-->
+      <!--<template slot="title">新建管理</template>-->
+      <!--<el-menu-item index="/new/addPlan">新建计划</el-menu-item>-->
+      <!--<el-menu-item index="/new/dmpCrowd">DMP人群</el-menu-item>-->
+      <!--<el-menu-item index="/new/visitorDirection">访客定向</el-menu-item>-->
+    <!--</el-submenu>-->
+    <!--<el-submenu index="2">-->
+      <!--<template slot="title">投放管理</template>-->
+      <!--<el-menu-item index="/index/pricing">智能调价</el-menu-item>-->
+      <!--<el-menu-item index="/index/intellDel">智能删除</el-menu-item>-->
+      <!--<el-menu-item index="/index/campaignLaunch">投放管理</el-menu-item>-->
+    <!--</el-submenu>-->
+    <!--<el-submenu index="3">-->
+      <!--<template slot="title">创意管理</template>-->
+      <!--<el-menu-item index="/creativity/creativityMan">创意管理</el-menu-item>-->
+      <!--<el-menu-item index="/creativity/creativityCharts">创意排行榜</el-menu-item>-->
+    <!--</el-submenu>-->
+    <!--<el-submenu index="4">-->
+      <!--<template slot="title">报表管理</template>-->
+      <!--<el-menu-item index="/report/reportMan">报表管理</el-menu-item>-->
+    <!--</el-submenu>-->
+  <!--</el-menu>-->
