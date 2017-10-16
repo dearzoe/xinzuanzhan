@@ -10,6 +10,10 @@ var routes = [{
   name: 'login',
   component: resolve => require(['./../components/common/Login.vue'], resolve)
 }, {
+  path: '/shop',
+  name: 'shop',
+  component: resolve => require(['@/views/shop.vue'], resolve)
+}, {
   path: '/index',
   name: 'index',
   redirect: {
@@ -99,7 +103,7 @@ router.beforeEach((to, from, next) => {
   let user_approve = sessionStorage.getItem("username");
   if (user_approve) {
     to.name === "login" ? next({
-      name: "index"
+      name: "shop"
     }) : next();
   } else {
     to.name === "login" ? next() : next({

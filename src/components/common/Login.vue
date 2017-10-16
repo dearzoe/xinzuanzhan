@@ -42,55 +42,40 @@
             }
         },
         methods: {
-            submitLogin(formName) {console.log(formName)
+            submitLogin(formName) {console.log(formName);
                 let vm = this;
                 vm.$refs[formName].validate((valid) => {
                     if(valid){
                         vm.logining = true;
-                        let params = vm.loginInfo;console.log(params)
+                        let params = vm.loginInfo;console.log(params);
                             loginApi(params).then(res => {
-                              console.log(res)
-                              console.log(res.status)
-                                      if (res.status == 200) {
-                                          if (res.data.code == 0) {
-                                              vm.$message.success("登陆成功!");
-                                              sessionStorage.setItem("username", res.data.data.username);
-                                              sessionStorage.setItem("nickname", res.data.data.nickname);
-                                              sessionStorage.setItem("id", res.data.data.id);
-                                              vm.$router.push({ name: "index" });
-                                          } else {
-                                              vm.$message.error(res.data.msg);
-                                              vm.logining = false;
-                                          }
-                                      }
-                                  }).catch(err => {
-                                      console.log(err);
-                                      vm.$message.error("登陆失败!");
-                                      vm.logining = false;
-                                  });
+                                if (res.status == 200) {
+                                    if (res.data.code == 0) {
+                                        vm.$notify({
+                                          message: '登陆成功！',
+                                          type: 'success'
+                                        });
+                                        sessionStorage.setItem("username", res.data.data.username);
+                                        sessionStorage.setItem("nickname", res.data.data.nickname);
+                                        sessionStorage.setItem("id", res.data.data.id);
+                                        vm.$router.push({ name: "shop" });
+                                    } else {
+                                        vm.$notify.error({
+                                          message: res.data.msg,
+                                          type: 'success'
+                                        });
+                                        vm.logining = false;
+                                    }
+                                }
+                            }).catch(err => {
+                                console.log(err);
+                              vm.$notify.error({
+                                message: '登陆失败！',
+                                type: 'success'
+                              });
+                                vm.logining = false;
+                            });
                             }
-//                    if (valid){
-//                        vm.logining = true;
-//                        let params = vm.loginInfo;console.log(params)
-//                        loginApi(params).then(res => {
-//                            if (res.status === 200) {
-//                                if (res.data.status) {
-//                                    vm.$message.success(res.data.message);
-//                                    sessionStorage.setItem("username", vm.loginInfo.username);
-//                                    sessionStorage.setItem("shop_name", "蜜色之吻内衣馆");
-//                                    sessionStorage.setItem("shop_id", "64469556");
-//                                    vm.$router.push({ name: "home" });
-//                                } else {
-//                                    vm.$message.error(res.data.message);
-//                                    vm.logining = false;
-//                                }
-//                            }
-//                        }).catch(err => {
-//                            console.log(err);
-//                            vm.$message.error("登陆失败！");
-//                            vm.logining = false;
-//                        });
-//                    }
                 });
             }
         }
