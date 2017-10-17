@@ -42,7 +42,7 @@
             }
         },
         methods: {
-            submitLogin(formName) {console.log(formName);
+            submitLogin(formName) {
                 let vm = this;
                 vm.$refs[formName].validate((valid) => {
                     if(valid){

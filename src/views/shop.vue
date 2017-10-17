@@ -1,4 +1,5 @@
 <template>
+
   <div class="shop-tab">
     <div class="select">
       <v-select></v-select>
@@ -54,7 +55,7 @@
           <span v-show="scope.row.btnHidden">
             <el-button
               size="small"
-              @click="handleEdit(scope.$index, scope.row)">进入系统</el-button>
+              @click="handleEdit(scope.$index, scope.row.nick)">进入系统</el-button>
             <el-button
               size="small"
               type="primary"
@@ -73,6 +74,7 @@
 <script>
   import select from '../components/select/select.vue'
   import serach from '../components/serach/serach.vue'
+  import {ShopLoginApi} from './../fetch/API'
   export default {
     data() {
       return {
@@ -88,7 +90,7 @@
           address: '上海市普陀区金沙江路 1518 弄',
           btnHidden: true
         }, {
-          nick: "英语二油条",
+          nick: "欧芭旗舰店",
           consultant: "林坚恋",
           allow: false,
           number1: 1,
@@ -113,16 +115,17 @@
       }
     },
     created() {
-      console.log(1)
+
     },
     components: {
       "v-select": select,
       "v-serach": serach
     },
     methods: {
-      handleEdit(index, row) {
-        this.$router.push({ name: "index" });
-        console.log(index, row);
+      handleEdit(index, nick) {
+        ShopLoginApi({nick:nick}).then(res => {
+          this.$router.push({ name: "index" });
+        })
       },
       handleDelete(index, row) {
         console.log(index, row);
