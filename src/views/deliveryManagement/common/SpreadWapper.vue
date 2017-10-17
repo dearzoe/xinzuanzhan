@@ -46,6 +46,10 @@
 </script>
 
 <style scoped lang="less" type="text/less">
+  @-webkit-keyframes masked-animation {
+    0%{ background-position: 0 0;}
+    100% { background-position: -100% 0;}
+  }
   #spreadMessage{
     width: 100%;
     height: 150px;
@@ -89,7 +93,11 @@
       border-radius: 5px;
       span:nth-child(1){
         height: 100px;
-        color: #fff;
+        background-image: -webkit-linear-gradient(left, #fff, #c0fff3, #fff);//文字渐变编排颜色
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-background-size: 200% 100%;
+        -webkit-animation: masked-animation 40s infinite linear;
       }
       .tg-bottom{
         height: 50px;
