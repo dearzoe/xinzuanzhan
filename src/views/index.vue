@@ -4,9 +4,7 @@
       <el-col :span="24">
         <div class="nav-box">
           <v-nav :class="NavMenu"></v-nav>
-          <div class="main">
-            <router-view></router-view>
-          </div>
+          <router-view></router-view>
         </div>
       </el-col>
     </el-row>

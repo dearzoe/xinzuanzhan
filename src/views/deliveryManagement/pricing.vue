@@ -1,5 +1,6 @@
 <template>
   <div class="pricing-tab">
+    <SpreadWapper :spreadMessage="1"></SpreadWapper>
     <el-table
       ref="multipleTable"
       :data="lists"
@@ -76,39 +77,81 @@
           <el-button
             size="small"
             type="primary"
-            @click="hiddenButton(scope.$index, scope.row)">是否开通系统</el-button>
+            @click="dialogShowTrust = true">查看托管日志</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="添加店铺" :visible.sync="dialogShowTrust">
+      <el-form :model="newShop" ref="newShop" class="form-wrapper" label-width="120px">
+        <el-form-item label="店铺淘宝ID" prop="tao_bao_nick">
+          <el-input v-model="newShop.tao_bao_nick" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="店铺名" prop="shop_name">
+          <el-input v-model="newShop.shop_name" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="店铺URL地址" prop="shop_url">
+          <el-input v-model="newShop.shop_url" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="主营类目" prop="main_categories">
+          <el-input v-model="newShop.main_categories" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="负责人" prop="principal">
+          <el-input v-model="newShop.principal" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="所属部门" prop="apartment">
+          <el-input v-model="newShop.apartment" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="服务时间" prop="server_time">
+          <el-input v-model="newShop.server_time" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="店铺状态" prop="shop_status">
+          <el-input v-model="newShop.shop_status" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="操作" prop="operation">
+          <el-select v-model="newShop.operation" placeholder="" class="full-width">
+            <el-option key="启用" label="启用" value="启用"></el-option>
+            <el-option key="禁用" label="禁用" value="禁用"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="系统登录账号" prop="sys_account">
+          <el-input v-model="newShop.sys_account" placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="系统登录密码" prop="sys_secret">
+          <el-input v-model="newShop.sys_secret" placeholder=""></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="">保存添加</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import SpreadWapper from './common/SpreadWapper.vue'
   import {pricingApi} from "./../../fetch/API"
   export default {
     data() {
       return {
-        lists: [{
-          actual_budget:"5000",
-          ad_pv:1,
-          campaign_id:"216017017",
-          campaign_name:"0819_cpc核心人群_其他展位测试",
-          charge:1,
-          click:1,
-          ctr:1,
-          day_budget:"5000",
-          ecpc:1,
-          ecpm:1,
-          end_time:"2199-01-01 00:00:00",
-          nick:"英语二油条",
-          online_status:"9",
-          rule_id:1,
-          start_time:"2016-12-30 00:00:00",
-          trust_target:1,
-          type:"8"
-        }],
-        multipleSelection: []
+        dialogShowTrust: false,
+        lists: [],
+        multipleSelection: [],
+        newShop: {
+          tao_bao_nick: "",
+          shop_name: "",
+          main_categories: "",
+          principal: "",
+          apartment: "",
+          server_time: "",
+          shop_status: "",
+          sys_account: "",
+          sys_secret: "",
+          operation: "启用"
+        },
       }
+    },
+    components: {
+      SpreadWapper
     },
     created() {
       let params = {nick: "英语二油条"};
@@ -143,3 +186,9 @@
     }
   }
 </script>
+
+<style scoped>
+  .pricing-tab{
+    margin: 10px 10% 10px;
+  }
+</style>
