@@ -1,0 +1,229 @@
+@-webkit-keyframes masked-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@-webkit-keyframes bg-radio-animation {
+  0% {
+    border-color: #f76c4f;
+    color: #f76c4f;
+  }
+  50% {
+    border-color: #f7085b;
+    color: #f7085b;
+  }
+  100% {
+    border-color: #f76c4f;
+    color: #f76c4f;
+  }
+}
+
+@-webkit-keyframes bg-radio-bg-animation {
+  0% {
+    background: #fad0c7;
+  }
+  50% {
+    background: #f77aa3;
+  }
+  100% {
+    background: #fad0c7;
+  }
+}
+
+@-webkit-keyframes bg1-animation {
+  0% {
+    background: #3499DC;
+  }
+  50% {
+    background: #00fbff;
+  }
+  100% {
+    background: #3499DC;
+  }
+}
+
+@-webkit-keyframes bg2-animation {
+  0% {
+    background: #1ABC9D;
+  }
+  50% {
+    background: #92ff9b;
+  }
+  100% {
+    background: #1ABC9D;
+  }
+}
+
+@-webkit-keyframes bg3-animation {
+  0% {
+    background: #9479D9;
+  }
+  50% {
+    background: #f688ff;
+  }
+  100% {
+    background: #9479D9;
+  }
+}
+
+@-webkit-keyframes bg4-animation {
+  0% {
+    background: #2FCD71;
+  }
+  50% {
+    background: #8effc1;
+  }
+  100% {
+    background: #2FCD71;
+  }
+}
+
+@-webkit-keyframes bg5-animation {
+  0% {
+    background: #E76B7A;
+  }
+  50% {
+    background: #ffb6ca;
+  }
+  100% {
+    background: #E76B7A;
+  }
+}
+
+@-webkit-keyframes bg6-animation {
+  0% {
+    background: #79D6D9;
+  }
+  50% {
+    background: #b6fdfe;
+  }
+  100% {
+    background: #79D6D9;
+  }
+}
+
+#spreadMessage {
+  width: 100%;
+  height: 150px;
+  > div {
+    float: left;
+    margin: 5px 0.55%;
+    width: 10%;
+    height: 100%;
+    span {
+      display: block;
+    }
+    span:nth-child(1) {
+      height: 80px;
+      line-height: 100px;
+      text-align: center;
+      font-size: 33px;
+    }
+    span:nth-child(2) {
+      height: 66px;
+      line-height: 66px;
+      text-align: center;
+    }
+  }
+  > div.tg-radio {
+    border-radius: 50%;
+    width: 142px;
+    height: 140px;
+    border: 5px solid #f76c4f;
+    overflow: hidden;
+    span:nth-child(1) {
+      color: #f76c4f;
+    }
+    span:nth-child(2) {
+      font-size: 18px;
+      line-height: 60px;
+      background: #fad0c7;
+      color: #fff;
+    }
+  }
+  > div.tg-radio:hover {
+    -webkit-animation: bg-radio-animation 4s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: bg-radio-animation 4s infinite linear;
+    }
+    span:nth-child(2) {
+      -webkit-animation: bg-radio-bg-animation 4s infinite linear;
+    }
+  }
+  > div.tg {
+    border-radius: 5px;
+    span:nth-child(1) {
+      height: 100px;
+      background-image: -webkit-linear-gradient(left, #fff, #68fffa, #fff); //文字渐变编排颜色
+      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      -webkit-background-size: 200% 100%;
+      -webkit-animation: masked-animation 40s infinite linear;
+    }
+    .tg-bottom {
+      height: 50px;
+      line-height: 50px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+    }
+  }
+  > div.tg:nth-child(4) {
+    background: #3499DC;
+  }
+  > div.tg:nth-child(4):hover {
+    -webkit-animation: bg1-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+  > div.tg:nth-child(5) {
+    background: #1ABC9D;
+  }
+  > div.tg:nth-child(5):hover {
+    -webkit-animation: bg2-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+  > div.tg:nth-child(6) {
+    background: #9479D9;
+  }
+  > div.tg:nth-child(6):hover {
+    -webkit-animation: bg3-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+  > div.tg:nth-child(7) {
+    background: #2FCD71;
+  }
+  > div.tg:nth-child(7):hover {
+    -webkit-animation: bg4-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+  > div.tg:nth-child(8) {
+    background: #E76B7A;
+  }
+  > div.tg:nth-child(8):hover {
+    -webkit-animation: bg5-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+  > div.tg:nth-child(9) {
+    background: #79D6D9;
+  }
+  > div.tg:nth-child(9):hover {
+    -webkit-animation: bg6-animation 2s infinite linear;
+    span:nth-child(1) {
+      -webkit-animation: masked-animation 4s infinite linear;
+    }
+  }
+}
