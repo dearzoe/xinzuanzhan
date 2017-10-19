@@ -2,17 +2,24 @@
   margin: 0;
   padding: 0;
 }
+
 body {
   font-family: "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
 }
+
 a {
-  text-decoration: none;
+  text-decoration: none
 }
+
 /* hack chrome浏览器autofill的黄色背景 */
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
+
+
 /* 清楚浮动 */
+
 .clearfix:after {
   content: ".";
   display: block;
@@ -21,16 +28,23 @@ input:-webkit-autofill {
   visibility: hidden;
   overflow: hidden;
 }
+
 .clearfix {
   zoom: 1;
 }
+
+
 /* 单行文本溢出 */
+
 .single-textover {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
+
+
 /* 多行文本溢出 */
+
 .multi-textover {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -38,82 +52,113 @@ input:-webkit-autofill {
   /* 文本行数 */
   overflow: hidden;
 }
+
+
 /* 主色 */
+
 .purple {
   background-color: #6656a6;
   color: #fff;
 }
+
 .light-blue {
-  background-color: #58B7FF;
+  background-color: #58B7FF
 }
+
 .text-light-blue {
-  color: #58B7FF;
+  color: #58B7FF
 }
+
 .blue {
-  background-color: #20A0FF;
+  background-color: #20A0FF
 }
+
 .text-blue {
-  color: #20A0FF;
+  color: #20A0FF
 }
+
 .dark-blue {
-  background-color: #1f74f2;
+  background-color: #1f74f2
 }
+
 .text-dark-blue {
-  color: #1f74f2;
+  color: #1f74f2
 }
+
+
 /* 辅助色 */
+
 .success {
-  background-color: #13CE66;
+  background-color: #13CE66
 }
+
 .warning {
-  background-color: #F7BA2A;
+  background-color: #F7BA2A
 }
+
 .danger {
-  background-color: #FF4949;
+  background-color: #FF4949
 }
+
+
 /* 中性色 */
+
 .black {
-  background-color: #1F2D3D;
+  background-color: #1F2D3D
 }
+
 .text-black {
-  color: #1F2D3D;
+  color: #1F2D3D
 }
+
 .light-black {
-  background-color: #324057;
+  background-color: #324057
 }
+
 .extra-light-black {
-  background-color: #475669;
+  background-color: #475669
 }
+
 .silver {
-  background-color: #8492A6;
+  background-color: #8492A6
 }
+
 .light-silver {
-  background-color: #99A9BF;
+  background-color: #99A9BF
 }
+
 .extra-light-silver {
-  background-color: #C0CCDA;
+  background-color: #C0CCDA
 }
+
 .gray {
-  background-color: #D3DCE6;
+  background-color: #D3DCE6
 }
+
 .text-gray {
-  color: #D3DCE6;
+  color: #D3DCE6
 }
+
 .light-gray {
-  background-color: #E5E9F2;
+  background-color: #E5E9F2
 }
+
 .extra-light-gray {
-  background-color: #EFF2F7;
+  background-color: #EFF2F7
 }
+
 .dark-white {
-  background-color: #F9FAFC;
+  background-color: #F9FAFC
 }
+
 .white {
-  background-color: #FFF;
+  background-color: #FFF
 }
+
 .text-white {
-  color: #fff;
+  color: #fff
 }
+
 .light-blue,
 .blue,
 .dark-blue,
@@ -126,38 +171,53 @@ input:-webkit-autofill {
 .silver,
 .light-silver,
 .extra-light-silver {
-  color: #fff;
+  color: #fff
 }
+
 .el-menu-item,
 .el-submenu .el-menu-item,
 .el-submenu__title {
   height: 36px;
   line-height: 36px;
 }
+
 .el-menu {
   border-radius: 0;
 }
+
+
 /* 文字对齐 */
+
 .text-left {
   text-align: left;
 }
+
 .text-center {
   text-align: center;
 }
+
 .text-right {
   text-align: right;
 }
+
+
 /* 浮动 */
+
 .pull-left {
   float: left;
 }
+
 .pull-right {
   float: right;
 }
+
+
 /* margin */
+
 .mgb10 {
   margin-bottom: 10px;
 }
+
 .hidden {
   display: none;
   visibility: hidden;
