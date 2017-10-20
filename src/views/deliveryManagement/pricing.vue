@@ -77,7 +77,10 @@
         label="实际预算"
         sortable
         width="100">
-        <template scope="scope"><i class="el-icon-edit" @click="cellClick"></i>&nbsp;{{ scope.row.day_budget }}</template>
+        <template scope="scope">
+          <input v-show="scope.row.sellShow" v-model="scope.row.day_budget" @keyup.enter="saveCellValue"/>
+          <span v-show="!scope.row.sellShow"><i class="el-icon-edit" @click="cellClick(scope.row)"></i>&nbsp;{{ scope.row.day_budget }}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="消耗（元）"
@@ -238,6 +241,7 @@
         dialogShowTrust: false, //托管日志
         priceTrust: false, //调价托管
         setTrustBoole: false, //托管设置
+        sellShow: false, //托管设置
         lists: [], //列表数据
         multipleSelection: [], //列表checkbox
         priceTrustForm: {
@@ -288,7 +292,7 @@
     },
     created() {
       let params = {nick: "英语二油条",init: 1};
-      pricingApi(params).then(res => {console.log(res);
+      pricingApi(params).then(res => {
         this.lists = res.data.data.lists.lists;
         this.statistic = res.data.data.statistic
       })
@@ -298,8 +302,14 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
-      cellClick(row, column, cell, event) {
-        console.log(row, column, cell, event);
+      cellClick(row) {
+        console.log(100000);
+        row.charge = 1000000;
+        console.log(row);
+        row.sellShow = !row.sellShow
+//        this.sellShow[index] = !this.sellShow;
+      },
+      saveCellValue() {
 
       },
       hiddenButton(index, row) {
@@ -328,8 +338,6 @@
       },
       //托管设置
       handleClickRuleForm(tab, event) {
-        console.log(this.ruleFormCPC.budget)
-        console.log(this.ruleFormROI.budget)
         this.setTrustTab = tab.name;
       },
       //托管设置radio按钮
