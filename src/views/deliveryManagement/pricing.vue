@@ -7,7 +7,7 @@
     </el-tabs>
     <el-row class="button-group">
       <el-col :span="8"><div class="grid-content bg-purple">
-        <el-button type="primary">调价托管</el-button>
+        <el-button type="primary" @click="priceTrust = true">调价托管</el-button>
         <el-button type="primary">取消托管</el-button>
         <el-button type="primary" @click="setTrustBoole = true">托管设置</el-button>
       </div></el-col>
@@ -75,8 +75,9 @@
       </el-table-column>
       <el-table-column
         label="实际预算"
-        sortable>
-        <template scope="scope">{{ scope.row.day_budget }}</template>
+        sortable
+        width="100">
+        <template scope="scope"><i class="el-icon-edit" @click="cellClick"></i>&nbsp;{{ scope.row.day_budget }}</template>
       </el-table-column>
       <el-table-column
         label="消耗（元）"
@@ -117,94 +118,111 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="添加店铺" :visible.sync="dialogShowTrust">
-      <el-form :model="newShop" ref="newShop" class="form-wrapper" label-width="120px">
-        <el-form-item label="店铺淘宝ID" prop="tao_bao_nick">
-          <el-input v-model="newShop.tao_bao_nick" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="店铺名" prop="shop_name">
-          <el-input v-model="newShop.shop_name" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="店铺URL地址" prop="shop_url">
-          <el-input v-model="newShop.shop_url" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="主营类目" prop="main_categories">
-          <el-input v-model="newShop.main_categories" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="负责人" prop="principal">
-          <el-input v-model="newShop.principal" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="所属部门" prop="apartment">
-          <el-input v-model="newShop.apartment" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="服务时间" prop="server_time">
-          <el-input v-model="newShop.server_time" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="店铺状态" prop="shop_status">
-          <el-input v-model="newShop.shop_status" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="操作" prop="operation">
-          <el-select v-model="newShop.operation" placeholder="" class="full-width">
-            <el-option key="启用" label="启用" value="启用"></el-option>
-            <el-option key="禁用" label="禁用" value="禁用"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="系统登录账号" prop="sys_account">
-          <el-input v-model="newShop.sys_account" placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="系统登录密码" prop="sys_secret">
-          <el-input v-model="newShop.sys_secret" placeholder=""></el-input>
-        </el-form-item>
-      </el-form>
+    <el-dialog title="调价托管" size="tiny" :visible.sync="priceTrust">
+          <el-form :model="priceTrustForm" ref="priceTrustForm" class="form-wrapper" label-width="120px">
+            <el-form-item label="选择托管规则：" prop="radios">
+              <el-radio-group v-model="priceTrustForm.radios" @change="handleRadio">
+                <el-radio label="cpc">控制CPC</el-radio>
+                <el-radio label="roi">控制ROI</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="">保存添加</el-button>
+        <el-button type="primary" @click="">确定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="托管设置" size="tiny" :visible.sync="setTrustBoole">
-      <el-tabs v-model="setTrustTab" type="card" @tab-click="handleClick">
-        <el-tab-pane :label="item == 'CPC' ? '控制CPC' : '控制ROI'" v-for="item in setTrustTabAry" :name="item">
-          <el-form :model="newShop" ref="newShop" class="form-wrapper" label-width="120px">
-          <el-form-item label="店铺淘宝ID" prop="tao_bao_nick">
-            <el-input v-model="newShop.tao_bao_nick" placeholder=""></el-input>
+      <el-tabs v-model="setTrustTab" type="card" @tab-click="handleClickRuleForm">
+        <el-tab-pane label="控制CPC" name="CPC">
+          <el-form :model="ruleFormCPC" ref="ruleFormCPC" class="form-wrapper" label-width="250px">
+          <el-form-item label="目的集合预算（元）" prop="budget">
+            <el-input v-model="ruleFormCPC.budget" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="店铺名" prop="shop_name">
-            <el-input v-model="newShop.shop_name" placeholder=""></el-input>
+          <el-form-item label="凌晨、早、午、晚预算比例">
+            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.dawn_ratio" placeholder=""></el-input></div>
+            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.morning_ratio" placeholder=""></el-input></div>
+            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.noor_ratio" placeholder=""></el-input></div>
+            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.night_ratio" placeholder=""></el-input></div>
           </el-form-item>
-          <el-form-item label="店铺URL地址" prop="shop_url">
-            <el-input v-model="newShop.shop_url" placeholder=""></el-input>
+          <el-form-item label="单次调整最大增幅（%）" prop="max_incre">
+            <el-input v-model="ruleFormCPC.max_incre" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="主营类目" prop="main_categories">
-            <el-input v-model="newShop.main_categories" placeholder=""></el-input>
+          <el-form-item label="执行时间间隔（H）" prop="time_space">
+            <el-input v-model="ruleFormCPC.time_space" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="负责人" prop="principal">
-            <el-input v-model="newShop.principal" placeholder=""></el-input>
+          <el-form-item label="实时观察间隔（H）" prop="real_time_space">
+            <el-input v-model="ruleFormCPC.real_time_space" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="所属部门" prop="apartment">
-            <el-input v-model="newShop.apartment" placeholder=""></el-input>
+          <el-form-item label="历史观察间隔（天）" prop="history_watch">
+            <el-input v-model="ruleFormCPC.history_watch" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="服务时间" prop="server_time">
-            <el-input v-model="newShop.server_time" placeholder=""></el-input>
+          <el-form-item label="调整数据依据" prop="effect_type">
+            <el-radio-group v-model="ruleFormCPC.effect_type" @change="handleRadio">
+              <el-radio label="1">点击效果</el-radio>
+              <el-radio label="2">展现效果</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="店铺状态" prop="shop_status">
-            <el-input v-model="newShop.shop_status" placeholder=""></el-input>
+          <el-form-item label="CPC计划所属资源位最高出价（元）" prop="cpc_max_price">
+            <el-input v-model="ruleFormCPC.cpc_max_price" placeholder=""></el-input>
           </el-form-item>
-          <el-form-item label="操作" prop="operation">
-            <el-select v-model="newShop.operation" placeholder="" class="full-width">
-              <el-option key="启用" label="启用" value="启用"></el-option>
-              <el-option key="禁用" label="禁用" value="禁用"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="系统登录账号" prop="sys_account">
-            <el-input v-model="newShop.sys_account" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="系统登录密码" prop="sys_secret">
-            <el-input v-model="newShop.sys_secret" placeholder=""></el-input>
-          </el-form-item>
+            <el-form-item label="CPC计划所属资源位最低出价（元）" prop="cpc_min_price">
+              <el-input v-model="ruleFormCPC.cpc_min_price" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="CPM计划所属资源位最高出价（元）" prop="cpm_max_price">
+              <el-input v-model="ruleFormCPC.cpm_max_price" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="CPM计划所属资源位最低出价（元）" prop="cpm_min_price">
+              <el-input v-model="ruleFormCPC.cpm_min_price" placeholder=""></el-input>
+            </el-form-item>
         </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="控制ROI" name="ROI">
+          <el-form :model="ruleFormROI" ref="ruleFormROI" class="form-wrapper" label-width="250px">
+            <el-form-item label="目的集合预算（元）" prop="budget">
+              <el-input v-model="ruleFormROI.budget" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="凌晨、早、午、晚预算比例">
+              <div class="margin-bottom-5"><el-input v-model="ruleFormROI.dawn_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormROI.morning_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormROI.noor_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormROI.night_ratio" placeholder=""></el-input></div>
+            </el-form-item>
+            <el-form-item label="单次调整最大增幅（%）" prop="max_incre">
+              <el-input v-model="ruleFormROI.max_incre" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="执行时间间隔（H）" prop="time_space">
+              <el-input v-model="ruleFormROI.time_space" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="实时观察间隔（H）" prop="real_time_space">
+              <el-input v-model="ruleFormROI.real_time_space" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="历史观察间隔（天）" prop="history_watch">
+              <el-input v-model="ruleFormROI.history_watch" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="调整数据依据" prop="effect_type">
+              <el-radio-group v-model="ruleFormROI.effect_type" @change="handleRadio">
+                <el-radio label="1">点击效果</el-radio>
+                <el-radio label="2">展现效果</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="CPC计划所属资源位最高出价（元）" prop="cpc_max_price">
+              <el-input v-model="ruleFormROI.cpc_max_price" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="CPC计划所属资源位最低出价（元）" prop="cpc_min_price">
+              <el-input v-model="ruleFormROI.cpc_min_price" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="CPM计划所属资源位最高出价（元）" prop="cpm_max_price">
+              <el-input v-model="ruleFormROI.cpm_max_price" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="CPM计划所属资源位最低出价（元）" prop="cpm_min_price">
+              <el-input v-model="ruleFormROI.cpm_min_price" placeholder=""></el-input>
+            </el-form-item>
+          </el-form>
         </el-tab-pane>
       </el-tabs>
       <div slot="footer">
-        <el-button type="primary" @click="">保存添加</el-button>
+        <el-button type="primary" @click="">立即提交</el-button>
+        <el-button type="default" @click="">重置</el-button>
       </div>
     </el-dialog>
   </div>
@@ -218,20 +236,44 @@
     data() {
       return {
         dialogShowTrust: false, //托管日志
+        priceTrust: false, //调价托管
         setTrustBoole: false, //托管设置
         lists: [], //列表数据
         multipleSelection: [], //列表checkbox
-        newShop: { //之后要删除
-          tao_bao_nick: "",
-          shop_name: "",
-          main_categories: "",
-          principal: "",
-          apartment: "",
-          server_time: "",
-          shop_status: "",
-          sys_account: "",
-          sys_secret: "",
-          operation: "启用"
+        priceTrustForm: {
+          radios:'cpc'
+        },
+        ruleFormCPC: {
+          budget: 0,
+          dawn_ratio: 0.1,
+          morning_ratio: 0.3,
+          noor_ratio: 0.3,
+          night_ratio: 0.3,
+          max_incre: 20,
+          time_space: 1,
+          real_time_space: 5,
+          history_watch: 7,
+          effect_type: 1,
+          cpc_max_price: 3,
+          cpc_min_price: 0.2,
+          cpm_max_price: 300,
+          cpm_min_price: 10
+        },
+        ruleFormROI: {
+          budget: 300,
+          dawn_ratio: 0.1,
+          morning_ratio: 0.3,
+          noor_ratio: 0.3,
+          night_ratio: 0.3,
+          max_incre: 20,
+          time_space: 1,
+          real_time_space: 5,
+          history_watch: 7,
+          effect_type: 2,
+          cpc_max_price: 3,
+          cpc_min_price: 0.2,
+          cpm_max_price: 300,
+          cpm_min_price: 10
         },
         statistic:{}, //全店推广显示信息
         allShop: 'first', //全店推广选项卡
@@ -256,6 +298,10 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      cellClick(row, column, cell, event) {
+        console.log(row, column, cell, event);
+
+      },
       hiddenButton(index, row) {
         this.$confirm('将要操作系统入口设置?', '提示', {
           confirmButtonText: '确定',
@@ -279,6 +325,16 @@
       //计划名搜索
       planSerachClick(ev) {
         console.log(ev);
+      },
+      //托管设置
+      handleClickRuleForm(tab, event) {
+        console.log(this.ruleFormCPC.budget)
+        console.log(this.ruleFormROI.budget)
+        this.setTrustTab = tab.name;
+      },
+      //托管设置radio按钮
+      handleRadio(v) {
+        console.log(v);
       }
     }
   }
@@ -297,5 +353,8 @@
         }
       }
     }
+  }
+  .margin-bottom-5{
+    margin-bottom: 5px;
   }
 </style>
