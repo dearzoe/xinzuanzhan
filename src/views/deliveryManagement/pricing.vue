@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column
         label="计划状态">
-        <template scope="scope">{{ scope.row.online_status }}</template>
+        <template scope="scope">{{ campaign_status_list[scope.row.online_status] }}</template>
       </el-table-column>
       <el-table-column
         label="管理状态"
@@ -76,9 +76,9 @@
       <el-table-column
         label="实际预算"
         sortable
-        width="100">
+        width="120">
         <template scope="scope">
-          <el-input v-show="scope.row.sellShow" v-model="scope.row.day_budget" @keyup.enter="saveCellValue"></el-input>
+          <el-input v-show="scope.row.sellShow" v-model="scope.row.day_budget" icon="upload" :on-icon-click="handleIconClick" @keyup.enter.native="handleIconClick"></el-input>
           <span v-show="!scope.row.sellShow"><i class="el-icon-edit" @click="cellClick(scope.row)"></i>&nbsp;{{ scope.row.day_budget }}</span>
         </template>
       </el-table-column>
@@ -242,6 +242,7 @@
         priceTrust: false, //调价托管
         setTrustBoole: false, //托管设置
         sellShow: false, //托管设置
+        campaign_status_list: {}, //计划状态
         lists: [], //列表数据
         multipleSelection: [], //列表checkbox
         priceTrustForm: {
@@ -292,9 +293,10 @@
     },
     created() {
       let params = {nick: "英语二油条",init: 1};
-      pricingApi(params).then(res => {
+      pricingApi(params).then(res => {console.log(res)
         this.lists = res.data.data.lists.lists;
-        this.statistic = res.data.data.statistic
+        this.statistic = res.data.data.statistic;
+        this.campaign_status_list = res.data.data.campaign_status_list;
       })
     },
     methods: {
@@ -307,10 +309,9 @@
         row.charge = 1000000;
         console.log(row);
         row.sellShow = !row.sellShow
-//        this.sellShow[index] = !this.sellShow;
       },
-      saveCellValue() {
-
+      handleIconClick() {
+        console.log('save')
       },
       hiddenButton(index, row) {
         this.$confirm('将要操作系统入口设置?', '提示', {
