@@ -78,7 +78,7 @@
         sortable
         width="100">
         <template scope="scope">
-          <input v-show="scope.row.sellShow" v-model="scope.row.day_budget" @keyup.enter="saveCellValue"/>
+          <el-input v-show="scope.row.sellShow" v-model="scope.row.day_budget" @keyup.enter="saveCellValue"></el-input>
           <span v-show="!scope.row.sellShow"><i class="el-icon-edit" @click="cellClick(scope.row)"></i>&nbsp;{{ scope.row.day_budget }}</span>
         </template>
       </el-table-column>
