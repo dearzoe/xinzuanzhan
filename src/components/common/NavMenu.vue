@@ -27,7 +27,10 @@
       </el-menu>
       <div class="line"></div>
     </div>
-
+    <div class="loguser pull-right text-right">
+      <span class="user" @click="userNameHandle"><i class="fa fa-user-o user-icon"></i>{{username}}</span>
+      <el-button type="text" @click="exitBtnHandle" class="text-white">退出</el-button>
+    </div>
   </header>
 </template>
 
@@ -35,7 +38,9 @@
   export default {
     name: 'NavMenu',
     data () {
-      return {}
+      return {
+
+      }
     },
     computed: {
       activeIndex() {console.log('activeIndex',this.$route.path)
@@ -45,9 +50,19 @@
 
       }
     },
+    props: {
+      username:null
+    },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      userNameHandle() {
+        console.log("userClick");
+      },
+      exitBtnHandle() {
+        sessionStorage.removeItem("username");
+        this.$router.push({name: "login"});
       }
     }
   }
@@ -60,12 +75,15 @@
   }
   .logo{
     float: left;
-    margin-left: 100px;
+    margin-left: 10%;
     margin-right: 30px;
     width: 242px;
-    height: 57px;
+    height: 100%;
     background: url("../../assets/img/logo.png");
     background-repeat: no-repeat;
+  }
+  .loguser{
+    margin-right: 10%;
   }
   .el-menu--dark{
     background-color: #1f74f2;

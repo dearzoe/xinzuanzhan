@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <div class="nav-box">
-          <v-nav :class="NavMenu"></v-nav>
+          <v-nav :class="NavMenu" :username="username"></v-nav>
           <router-view></router-view>
         </div>
       </el-col>
@@ -21,6 +21,11 @@
     },
     components: {
       "v-nav": NavMenu
+    },
+    computed: {
+      username() {
+        return sessionStorage.getItem("username");
+      }
     }
   }
 </script>
