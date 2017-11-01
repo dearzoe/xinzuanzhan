@@ -47,8 +47,8 @@
                 vm.$refs[formName].validate((valid) => {
                     if(valid){
                         vm.logining = true;
-                        let params = vm.loginInfo;console.log(params);
-                            loginApi(params).then(res => {
+                        let params = vm.loginInfo;
+                            loginApi(params).then(res => {console.log(res)
                                 if (res.status == 200) {
                                     if (res.data.code == 0) {
                                         vm.$notify({
@@ -56,7 +56,7 @@
                                           type: 'success'
                                         });
                                         sessionStorage.setItem("username", res.data.data.username);
-                                        sessionStorage.setItem("nickname", res.data.data.nickname);
+                                        sessionStorage.setItem("name", res.data.data.nickname);
                                         sessionStorage.setItem("id", res.data.data.id);
                                         vm.$router.push({ name: "shop" });
                                     } else {

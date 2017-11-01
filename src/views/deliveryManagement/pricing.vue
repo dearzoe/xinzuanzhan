@@ -293,7 +293,7 @@
     },
     created() {
       let params = {nick: "英语二油条",init: 1};
-      pricingApi(params).then(res => {console.log(res)
+      pricingApi(params).then(res => {
         this.lists = res.data.data.lists.lists;
         this.statistic = res.data.data.statistic;
         this.campaign_status_list = res.data.data.campaign_status_list;
