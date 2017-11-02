@@ -1,0 +1,18 @@
+.shop-tab {
+  margin: 30px 50px 0;
+  position: relative;
+}
+.shop-tab .select {
+  margin-bottom: 20px;
+  float: right;
+  width: 230px;
+}
+.shop-tab .select:first-child {
+  margin-right: 400px;
+}
+.shop-tab .serach {
+  position: absolute;
+  width: 400px;
+  top: -15px;
+  right: 0;
+}
