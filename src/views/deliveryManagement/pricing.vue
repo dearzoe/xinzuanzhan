@@ -7,16 +7,16 @@
     </el-tabs>
     <el-row class="button-group">
       <el-col :span="8"><div class="grid-content bg-purple">
-        <el-button type="primary" @click="priceTrust = true">调价托管</el-button>
-        <el-button type="primary">取消托管</el-button>
-        <el-button type="primary" @click="setTrustBoole = true">托管设置</el-button>
+        <el-button type="primary" v-waves @click="priceTrust = true">调价托管</el-button>
+        <el-button type="primary" v-waves>取消托管</el-button>
+        <el-button type="primary" v-waves @click="setTrustBoole = true">托管设置</el-button>
       </div></el-col>
       <el-col :span="8"><div class="grid-content bg-purple-light">&nbsp;</div></el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple button-group-right">
-          <el-button type="primary" :plain="true">7天</el-button>
-          <el-button type="primary" :plain="true">3天</el-button>
-          <el-button type="primary" :plain="true">今天</el-button>
+          <el-button type="primary" v-waves :plain="true">7天</el-button>
+          <el-button type="primary" v-waves :plain="true">3天</el-button>
+          <el-button type="primary" v-waves :plain="true">今天</el-button>
         </div>
       </el-col>
     </el-row>
@@ -43,6 +43,7 @@
       border
       tooltip-effect="dark"
       style="width: 100%"
+      v-loading.body="listLoading"
       @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
@@ -78,8 +79,7 @@
         sortable
         width="120">
         <template scope="scope">
-          <el-input v-show="scope.row.sellShow" v-model="scope.row.day_budget" icon="upload" :on-icon-click="handleIconClick" @keyup.enter.native="handleIconClick"></el-input>
-          <span v-show="!scope.row.sellShow"><i class="el-icon-edit" @click="cellClick(scope.row)"></i>&nbsp;{{ scope.row.day_budget }}</span>
+          <span><i class="el-icon-edit" @click='cellClick'></i>&nbsp;{{ scope.row.day_budget }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -117,57 +117,71 @@
           <el-button
             size="small"
             type="primary"
+            v-waves
             @click="dialogShowTrust = true">查看托管日志</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="调价托管" size="tiny" :visible.sync="priceTrust">
-          <el-form :model="priceTrustForm" ref="priceTrustForm" class="form-wrapper" label-width="120px">
-            <el-form-item label="选择托管规则：" prop="radios">
-              <el-radio-group v-model="priceTrustForm.radios" @change="handleRadio">
-                <el-radio label="cpc">控制CPC</el-radio>
-                <el-radio label="roi">控制ROI</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
+    <el-dialog title="修改预算" size="tiny" :visible.sync="reviseBudgetBoole">
+      <el-form :model="reviseBudget" ref="reviseBudget" class="form-wrapper" label-width="120px">
+        <el-form-item label="实际预算">
+          <el-input v-model="reviseBudget.name1"></el-input>
+        </el-form-item>
+        <el-form-item label="计划预算">
+          <el-input v-model="reviseBudget.name2"></el-input>
+        </el-form-item>
+      </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="">确定</el-button>
+        <el-button type="primary" v-waves @click="">确定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="调价托管" size="tiny" :visible.sync="priceTrust">
+      <el-form :model="priceTrustForm" ref="priceTrustForm" class="form-wrapper" label-width="120px">
+        <el-form-item label="选择托管规则：" prop="radios">
+          <el-radio-group v-model="priceTrustForm.radios" @change="handleRadio">
+            <el-radio label="cpc">控制CPC</el-radio>
+            <el-radio label="roi">控制ROI</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" v-waves @click="">确定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="托管设置" size="tiny" :visible.sync="setTrustBoole">
       <el-tabs v-model="setTrustTab" type="card" @tab-click="handleClickRuleForm">
         <el-tab-pane label="控制CPC" name="CPC">
           <el-form :model="ruleFormCPC" ref="ruleFormCPC" class="form-wrapper" label-width="250px">
-          <el-form-item label="目的集合预算（元）" prop="budget">
-            <el-input v-model="ruleFormCPC.budget" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="凌晨、早、午、晚预算比例">
-            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.dawn_ratio" placeholder=""></el-input></div>
-            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.morning_ratio" placeholder=""></el-input></div>
-            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.noor_ratio" placeholder=""></el-input></div>
-            <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.night_ratio" placeholder=""></el-input></div>
-          </el-form-item>
-          <el-form-item label="单次调整最大增幅（%）" prop="max_incre">
-            <el-input v-model="ruleFormCPC.max_incre" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="执行时间间隔（H）" prop="time_space">
-            <el-input v-model="ruleFormCPC.time_space" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="实时观察间隔（H）" prop="real_time_space">
-            <el-input v-model="ruleFormCPC.real_time_space" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="历史观察间隔（天）" prop="history_watch">
-            <el-input v-model="ruleFormCPC.history_watch" placeholder=""></el-input>
-          </el-form-item>
-          <el-form-item label="调整数据依据" prop="effect_type">
-            <el-radio-group v-model="ruleFormCPC.effect_type" @change="handleRadio">
-              <el-radio label="1">点击效果</el-radio>
-              <el-radio label="2">展现效果</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="CPC计划所属资源位最高出价（元）" prop="cpc_max_price">
-            <el-input v-model="ruleFormCPC.cpc_max_price" placeholder=""></el-input>
-          </el-form-item>
+            <el-form-item label="目的集合预算（元）" prop="budget">
+              <el-input v-model="ruleFormCPC.budget" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="凌晨、早、午、晚预算比例">
+              <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.dawn_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.morning_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.noor_ratio" placeholder=""></el-input></div>
+              <div class="margin-bottom-5"><el-input v-model="ruleFormCPC.night_ratio" placeholder=""></el-input></div>
+            </el-form-item>
+            <el-form-item label="单次调整最大增幅（%）" prop="max_incre">
+              <el-input v-model="ruleFormCPC.max_incre" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="执行时间间隔（H）" prop="time_space">
+              <el-input v-model="ruleFormCPC.time_space" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="实时观察间隔（H）" prop="real_time_space">
+              <el-input v-model="ruleFormCPC.real_time_space" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="历史观察间隔（天）" prop="history_watch">
+              <el-input v-model="ruleFormCPC.history_watch" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="调整数据依据" prop="effect_type">
+              <el-radio-group v-model="ruleFormCPC.effect_type" @change="handleRadio">
+                <el-radio label="1">点击效果</el-radio>
+                <el-radio label="2">展现效果</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="CPC计划所属资源位最高出价（元）" prop="cpc_max_price">
+              <el-input v-model="ruleFormCPC.cpc_max_price" placeholder=""></el-input>
+            </el-form-item>
             <el-form-item label="CPC计划所属资源位最低出价（元）" prop="cpc_min_price">
               <el-input v-model="ruleFormCPC.cpc_min_price" placeholder=""></el-input>
             </el-form-item>
@@ -177,7 +191,7 @@
             <el-form-item label="CPM计划所属资源位最低出价（元）" prop="cpm_min_price">
               <el-input v-model="ruleFormCPC.cpm_min_price" placeholder=""></el-input>
             </el-form-item>
-        </el-form>
+          </el-form>
         </el-tab-pane>
         <el-tab-pane label="控制ROI" name="ROI">
           <el-form :model="ruleFormROI" ref="ruleFormROI" class="form-wrapper" label-width="250px">
@@ -224,8 +238,8 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer">
-        <el-button type="primary" @click="">立即提交</el-button>
-        <el-button type="default" @click="">重置</el-button>
+        <el-button type="primary" v-waves @click="">立即提交</el-button>
+        <el-button type="default" v-waves @click="">重置</el-button>
       </div>
     </el-dialog>
   </div>
@@ -234,17 +248,31 @@
 <script>
   import SpreadWapper from './common/SpreadWapper.vue'
   import SelectGroup from './common/SelectGroup.vue'
+  import waves from '@/directive/waves/index.js' // 水波纹指令
   import {pricingApi} from "./../../fetch/API"
   export default {
     data() {
       return {
-        dialogShowTrust: false, //托管日志
-        priceTrust: false, //调价托管
-        setTrustBoole: false, //托管设置
-        sellShow: false, //托管设置
-        campaign_status_list: {}, //计划状态
-        lists: [], //列表数据
-        multipleSelection: [], //列表checkbox
+        listLoading: true,
+        /*托管日志*/
+        dialogShowTrust: false,
+        /*调价托管*/
+        priceTrust: false,
+        /*托管设置*/
+        setTrustBoole: false,
+        /*修改预算*/
+        reviseBudgetBoole: false,
+        /*计划状态*/
+        campaign_status_list: {},
+        /*修改预算*/
+        reviseBudget: {
+          name1:1,
+          name2:2
+        },
+        /*列表数据*/
+        lists: [],
+        /*列表checkbox*/
+        multipleSelection: [],
         priceTrustForm: {
           radios:'cpc'
         },
@@ -280,9 +308,12 @@
           cpm_max_price: 300,
           cpm_min_price: 10
         },
-        statistic:{}, //全店推广显示信息
-        allShop: 'first', //全店推广选项卡
-        planName: '', //搜索内容
+        /*全店推广显示信息*/
+        statistic:{},
+        /*全店推广选项卡*/
+        allShop: 'first',
+        /*搜索内容*/
+        planName: '',
         setTrustTabAry: ['CPC', 'ROI'],
         setTrustTab: 'CPC'
       }
@@ -291,57 +322,48 @@
       'v-spread': SpreadWapper,
       'v-select': SelectGroup
     },
+    directives: {
+      waves
+    },
     created() {
-      let params = {nick: "英语二油条",init: 1};
-      pricingApi(params).then(res => {console.log(res)
-        this.lists = res.data.data.lists.lists;
-        this.statistic = res.data.data.statistic;
-        this.campaign_status_list = res.data.data.campaign_status_list;
-      })
+      this.getList()
     },
     methods: {
-      //列表checkbox
+      getList() {
+        this.listLoading = true;
+        let params = {nick: "英语二油条",init: 1};
+        pricingApi(params).then(res => {console.log(res);
+          const items = res.data.data.lists.lists;
+          this.lists = items.map(v => {
+            this.$set(v, 'edit', false);
+            return v
+          });
+          this.statistic = res.data.data.statistic;
+          this.campaign_status_list = res.data.data.campaign_status_list;
+          this.listLoading = false;
+        })
+      },
+      /*列表checkbox*/
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      /*实际预算单元格编辑*/
       cellClick(row) {
-        console.log(100000);
-        row.charge = 1000000;
+        this.reviseBudgetBoole = true;
         console.log(row);
-        row.sellShow = !row.sellShow
       },
-      handleIconClick() {
-        console.log('save')
+      /*实际预算单元格编辑（保存）*/
+      handleIconClick(scorp) {
       },
-      hiddenButton(index, row) {
-        this.$confirm('将要操作系统入口设置?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'info'
-        }).then(() => {
-          row.btnHidden = !row.btnHidden;
-          this.$notify({
-            message: '修改成功!',
-            type: 'success',
-            duration: 1000
-          });
-        }).catch(() => {
-          row.btnHidden = row.btnHidden
-          this.$notify.info({
-            message: '已取消修改!',
-            duration: 1000
-          });
-        });
-      },
-      //计划名搜索
+      /*计划名搜索*/
       planSerachClick(ev) {
         console.log(ev);
       },
-      //托管设置
+      /*托管设置*/
       handleClickRuleForm(tab, event) {
         this.setTrustTab = tab.name;
       },
-      //托管设置radio按钮
+      /*托管设置radio按钮*/
       handleRadio(v) {
         console.log(v);
       }

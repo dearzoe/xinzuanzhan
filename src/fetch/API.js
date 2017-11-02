@@ -20,3 +20,5 @@ export const loginApi = params => axios.post("public/index.php/api/portal/call?m
 export const ShopLoginApi = params => axios.post("public/index.php/api/portal/call?m=index&c=index&a=shopLogin", Qs.stringify(params));
 // 智能调价-数据列表(v0.12#1218-本地)
 export const pricingApi = params => axios.post("public/index.php/api/portal/call?m=index&c=index&a=pricing", Qs.stringify(params));
+// 智能调价-数据列表(v0.12#1218-本地)
+export const campaignLaunchApi = params => axios.post("public/index.php/api/portal/call?m=index&c=campaignLaunch&a=campaignList", Qs.stringify(params));

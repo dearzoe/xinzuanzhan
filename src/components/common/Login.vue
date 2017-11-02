@@ -47,8 +47,8 @@
                 vm.$refs[formName].validate((valid) => {
                     if(valid){
                         vm.logining = true;
-                        let params = vm.loginInfo;console.log(params);
-                            loginApi(params).then(res => {
+                        let params = vm.loginInfo;
+                            loginApi(params).then(res => {console.log(res)
                                 if (res.status == 200) {
                                     if (res.data.code == 0) {
                                         vm.$notify({
@@ -56,7 +56,7 @@
                                           type: 'success'
                                         });
                                         sessionStorage.setItem("username", res.data.data.username);
-                                        sessionStorage.setItem("nickname", res.data.data.nickname);
+                                        sessionStorage.setItem("name", res.data.data.nickname);
                                         sessionStorage.setItem("id", res.data.data.id);
                                         vm.$router.push({ name: "shop" });
                                     } else {
@@ -108,7 +108,7 @@
         height: 270px;
         border-radius: 4px;
         box-shadow: 0px 0px 24px -7px #000;
-        background-color: rgba(7, 7, 7, 0.6);
+        /*background-color: rgba(255, 255, 255, 0.6);*/
     }
 
     .login-wrapper h1 {

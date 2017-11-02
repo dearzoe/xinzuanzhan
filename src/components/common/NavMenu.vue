@@ -27,7 +27,10 @@
       </el-menu>
       <div class="line"></div>
     </div>
-
+    <div class="loguser pull-right text-right">
+      <span class="user" @click="userNameHandle"><i class="fa fa-user-o user-icon"></i>{{username}}</span>
+      <el-button type="text" @click="exitBtnHandle" class="text-white">退出</el-button>
+    </div>
   </header>
 </template>
 
@@ -35,7 +38,9 @@
   export default {
     name: 'NavMenu',
     data () {
-      return {}
+      return {
+
+      }
     },
     computed: {
       activeIndex() {console.log('activeIndex',this.$route.path)
@@ -45,27 +50,55 @@
 
       }
     },
+    props: {
+      username:null
+    },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      userNameHandle() {
+        console.log("userClick");
+      },
+      exitBtnHandle() {
+        this.$confirm('将要退出注销用户?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          sessionStorage.removeItem("username");
+          this.$router.push({name: "login"});
+        }).catch(() => {
+        });
+
       }
     }
   }
 </script>
 
 <style>
+  @import url("./../../assets/font-awesome-4.7.0/css/font-awesome.min.css");
   header {
     height: 60px;
     line-height: 60px;
   }
   .logo{
     float: left;
-    margin-left: 100px;
+    margin-left: 10%;
     margin-right: 30px;
     width: 242px;
-    height: 57px;
+    height: 100%;
     background: url("../../assets/img/logo.png");
     background-repeat: no-repeat;
+  }
+  .user{
+    cursor: pointer;
+  }
+  .loguser{
+    margin-right: 10%;
+  }
+  .user-icon{
+    margin-right: 10px;
   }
   .el-menu--dark{
     background-color: #1f74f2;

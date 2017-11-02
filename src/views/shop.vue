@@ -124,7 +124,9 @@
     methods: {
       handleEdit(index, nick) {
         ShopLoginApi({nick:nick}).then(res => {
-          this.$router.push({ name: "index" });
+          if(res.status == 200){
+            this.$router.push({ name: "index" });
+          }
         })
       },
       handleDelete(index, row) {
