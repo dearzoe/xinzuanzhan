@@ -61,14 +61,23 @@
         console.log("userClick");
       },
       exitBtnHandle() {
-        sessionStorage.removeItem("username");
-        this.$router.push({name: "login"});
+        this.$confirm('将要退出注销用户?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          sessionStorage.removeItem("username");
+          this.$router.push({name: "login"});
+        }).catch(() => {
+        });
+
       }
     }
   }
 </script>
 
 <style>
+  @import url("./../../assets/font-awesome-4.7.0/css/font-awesome.min.css");
   header {
     height: 60px;
     line-height: 60px;
@@ -82,8 +91,14 @@
     background: url("../../assets/img/logo.png");
     background-repeat: no-repeat;
   }
+  .user{
+    cursor: pointer;
+  }
   .loguser{
     margin-right: 10%;
+  }
+  .user-icon{
+    margin-right: 10px;
   }
   .el-menu--dark{
     background-color: #1f74f2;

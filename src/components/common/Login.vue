@@ -108,7 +108,7 @@
         height: 270px;
         border-radius: 4px;
         box-shadow: 0px 0px 24px -7px #000;
-        background-color: rgba(7, 7, 7, 0.6);
+        /*background-color: rgba(255, 255, 255, 0.6);*/
     }
 
     .login-wrapper h1 {

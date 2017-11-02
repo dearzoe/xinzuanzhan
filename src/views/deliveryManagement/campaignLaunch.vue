@@ -4,7 +4,7 @@
       <el-col :span="8"><div class="grid-content bg-purple">
         <el-button type="primary" v-waves @click="priceTrust = true">新建计划</el-button>
         <el-button type="primary" v-waves>暂停计划</el-button>
-        <el-button type="success" v-waves @click="setTrustBoole = true">启动计划</el-button>
+        <el-button type="primary" v-waves @click="setTrustBoole = true">启动计划</el-button>
         <el-button type="danger" v-waves @click="setTrustBoole = true">删除计划</el-button>
       </div></el-col>
       <el-col :span="8"><div class="grid-content bg-purple-light">&nbsp;</div></el-col>
@@ -425,7 +425,7 @@
           console.log(res.data);
           console.log(res.data.data.online_status_list);
           this.lists = res.data.data.list;
-//          this.statistic = res.data.data.statistic;
+          //this.statistic = res.data.data.statistic;
           this.online_status_list = res.data.data.online_status_list;
           this.listLoading = false;
         })
