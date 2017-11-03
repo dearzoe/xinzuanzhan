@@ -71,7 +71,7 @@
                                 console.log(err);
                               vm.$notify.error({
                                 message: '登陆失败！',
-                                type: 'success'
+                                type: 'error'
                               });
                                 vm.logining = false;
                             });

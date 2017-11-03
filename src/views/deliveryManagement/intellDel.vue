@@ -326,7 +326,45 @@
       waves
     },
     created() {
-      this.getList()
+      this.getList();
+      // 缓存指针
+      let _this = this;
+      // 设置一个开关来避免重负请求数据
+      let sw = true;
+      //设置页数
+      let page = 1;
+      // 注册scroll事件并监听
+      window.addEventListener('scroll',function(){
+        if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+          // 如果开关打开则加载数据
+          if(sw==true){
+            page++;
+            let params = {nick: "英语二油条",init: 1, page:page};
+            // 将开关关闭
+            sw = false;
+            pricingApi(params).then(function(res){console.log(res);
+              let code = res.data.code;
+              if(code == 0){
+                if(_this.lists.length < res.data.data.lists.total){
+                  _this.lists.push.apply(_this.lists, res.data.data.lists.lists);
+                  // 数据更新完毕，将开关打开
+                  sw = true;
+                  _this.$notify.success("下拉加载数据完毕");
+                }else{
+                  _this.$notify.success("没有更多数据");
+                  sw = false;
+                }
+
+              }else{
+                _this.$notify.error(res.data.msg);
+              }
+
+            }).catch(function(error){
+              console.log(error);
+            });
+          }
+        }
+      })
     },
     methods: {
       getList() {

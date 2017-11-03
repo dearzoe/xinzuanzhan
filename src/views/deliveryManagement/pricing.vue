@@ -47,34 +47,41 @@
       @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
+        align="center"
         width="55">
       </el-table-column>
       <el-table-column
         label="计划信息"
+        align="center"
         width="300">
         <template scope="scope">{{ scope.row.campaign_name }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="计划状态">
         <template scope="scope">{{ campaign_status_list[scope.row.online_status] }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="管理状态"
         sortable>
         <template scope="scope">{{ scope.row.trust_target }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="投放时间"
         sortable
         width="170">
         <template scope="scope">{{ scope.row.start_time }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="计划预算"
         sortable>
         <template scope="scope">{{ scope.row.shop_day_budget }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="实际预算"
         sortable
         width="120">
@@ -83,31 +90,37 @@
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="消耗（元）"
         sortable>
         <template scope="scope">{{ scope.row.charge }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="展现"
         sortable>
         <template scope="scope">{{ scope.row.ad_pv }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="点击"
         sortable>
         <template scope="scope">{{ scope.row.ctr }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="点击率"
         sortable>
         <template scope="scope">{{ scope.row.click }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="千次展现成本"
         sortable>
         <template scope="scope">{{ scope.row.ecpm }}</template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="点击单价"
         sortable>
         <template scope="scope">{{ scope.row.ecpc}}</template>
@@ -118,7 +131,7 @@
             size="small"
             type="primary"
             v-waves
-            @click="dialogShowTrust = true">查看托管日志</el-button>
+            @click="setTrustLog = true">查看托管日志</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -242,6 +255,205 @@
         <el-button type="default" v-waves @click="">重置</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="托管日志" size="large" :visible.sync="setTrustLog">
+      <el-table
+        border
+        :data="tableData3"
+        style="width: 150%">
+        <el-table-column
+          prop="date"
+          align="center"
+          label="ID"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          align="center"
+          label="日期"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          align="center"
+          label="单元"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          align="center"
+          label="资源位"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          align="center"
+          label="定向"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          align="center"
+          label="时刻"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          align="center" label="调整时实时">
+          <el-table-column
+            prop="province"
+            align="center"
+            label="原价格"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            align="center"
+            label="新价格"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="city"
+            align="center"
+            label="展现"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="点击"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="消耗"
+            width="120">
+          </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center" label="调整时历史效果数据（7天）">
+          <el-table-column
+            prop="province"
+            align="center"
+            label="展现"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            align="center"
+            label="点击"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="city"
+            align="center"
+            label="消耗"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="店铺收藏数"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="宝贝收藏数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="成交订单数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="总成交金额"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="访客"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            align="center"
+            label="总购物车数"
+            width="120">
+          </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center" label="调整后记录数据(调整后一小时)">
+          <el-table-column
+            prop="province"
+            align="center"
+            label="出价"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            align="center"
+            label="展现"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="city"
+            align="center"
+            label="点击"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="消耗"
+            width="300">
+          </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center" label="调整后效果数据(调整后一天)">
+          <el-table-column
+            prop="province"
+            align="center"
+            label="店铺收藏数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            align="center"
+            label="宝贝收藏数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="city"
+            align="center"
+            label="成交订单数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="成交总金额"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="总购物车数"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            align="center"
+            label="访客"
+            width="300">
+          </el-table-column>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -255,7 +467,7 @@
       return {
         listLoading: true,
         /*托管日志*/
-        dialogShowTrust: false,
+        setTrustLog: false,
         /*调价托管*/
         priceTrust: false,
         /*托管设置*/
@@ -315,7 +527,58 @@
         /*搜索内容*/
         planName: '',
         setTrustTabAry: ['CPC', 'ROI'],
-        setTrustTab: 'CPC'
+        setTrustTab: 'CPC',
+        /*托管日志*/
+        tableData3: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
       }
     },
     components: {
@@ -326,13 +589,51 @@
       waves
     },
     created() {
-      this.getList()
+      this.getList();
+      // 缓存指针
+      let _this = this;
+      // 设置一个开关来避免重负请求数据
+      let sw = true;
+      //设置页数
+      let page = 1;
+      // 注册scroll事件并监听
+      window.addEventListener('scroll',function(){
+        if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+          // 如果开关打开则加载数据
+          if(sw==true){
+            page++;
+            let params = {nick: "英语二油条",init: 1, page:page};
+            // 将开关关闭
+            sw = false;
+            pricingApi(params).then(function(res){console.log(res);
+            let code = res.data.code;
+              if(code == 0){
+                if(_this.lists.length < res.data.data.lists.total){
+                  _this.lists.push.apply(_this.lists, res.data.data.lists.lists);
+                  // 数据更新完毕，将开关打开
+                  sw = true;
+                  _this.$notify.success("下拉加载数据完毕");
+                }else{
+                  _this.$notify.success("没有更多数据");
+                  sw = false;
+                }
+
+              }else{
+                _this.$notify.error(res.data.msg);
+              }
+
+            }).catch(function(error){
+              console.log(error);
+            });
+          }
+        }
+      })
     },
     methods: {
       getList() {
         this.listLoading = true;
         let params = {nick: "英语二油条",init: 1};
-        pricingApi(params).then(res => {console.log(res);
+        pricingApi(params).then(res => {
           const items = res.data.data.lists.lists;
           this.lists = items.map(v => {
             this.$set(v, 'edit', false);

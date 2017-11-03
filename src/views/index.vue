@@ -5,6 +5,7 @@
         <div class="nav-box">
           <v-nav :class="NavMenu" :username="username"></v-nav>
           <router-view></router-view>
+          <footer></footer>
         </div>
       </el-col>
     </el-row>
@@ -30,5 +31,8 @@
   }
 </script>
 
-<style>
+<style scope>
+  footer{
+    height: 50px;
+  }
 </style>

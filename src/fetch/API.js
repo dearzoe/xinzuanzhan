@@ -15,10 +15,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // );
 
 // 登录
-export const loginApi = params => axios.post("public/index.php/api/portal/call?m=index&c=user&a=login", Qs.stringify(params));
+export const loginApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=user&a=login", Qs.stringify(params));
 // 店铺登录(v0.12#1218-本地)
-export const ShopLoginApi = params => axios.post("public/index.php/api/portal/call?m=index&c=index&a=shopLogin", Qs.stringify(params));
+export const ShopLoginApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=shopLogin", Qs.stringify(params));
 // 智能调价-数据列表(v0.12#1218-本地)
-export const pricingApi = params => axios.post("public/index.php/api/portal/call?m=index&c=index&a=pricing", Qs.stringify(params));
+export const pricingApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=pricing", Qs.stringify(params));
 // 智能调价-数据列表(v0.12#1218-本地)
-export const campaignLaunchApi = params => axios.post("public/index.php/api/portal/call?m=index&c=campaignLaunch&a=campaignList", Qs.stringify(params));
+export const campaignLaunchApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaignLaunch&a=campaignList", Qs.stringify(params));

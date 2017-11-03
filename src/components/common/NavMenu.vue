@@ -2,7 +2,7 @@
   <header class="NavMenu  dark-blue">
     <div class="logo"></div>
     <div class="pull-left">
-      <el-menu theme="dark" :default-active="activeIndex" :default-openeds="openedsIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
+      <el-menu theme="dark" :default-active="activeIndex" :default-openeds="openedsIndex" class="el-menu" mode="horizontal" @select="handleSelect" router>
         <el-submenu index="1">
           <template slot="title">新建管理</template>
           <el-menu-item index="/new/addPlan">新建计划</el-menu-item>
@@ -28,7 +28,13 @@
       <div class="line"></div>
     </div>
     <div class="loguser pull-right text-right">
-      <span class="user" @click="userNameHandle"><i class="fa fa-user-o user-icon"></i>{{username}}</span>
+      <span class="user" @click="userNameHandle">
+        <i class="fa fa-user-o user-icon"></i>{{username}}
+        <span class="userShow">
+            <a type="text" @click="asyncData" class="text-white">数据同步</a>
+            <a type="text" @click="switchShop" class="text-white">切换店铺</a>
+        </span>
+      </span>
       <el-button type="text" @click="exitBtnHandle" class="text-white">退出</el-button>
     </div>
   </header>
@@ -37,21 +43,20 @@
 <script>
   export default {
     name: 'NavMenu',
-    data () {
-      return {
-
-      }
+    data() {
+      return {}
     },
     computed: {
-      activeIndex() {console.log('activeIndex',this.$route.path)
+      activeIndex() {
+        console.log('activeIndex', this.$route.path)
         return this.$route.path;
       },
-      openedsIndex() {console.log(this)
-
+      openedsIndex() {
+        console.log(this)
       }
     },
     props: {
-      username:null
+      username: null
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -60,17 +65,33 @@
       userNameHandle() {
         console.log("userClick");
       },
+      asyncData() {
+        this.$confirm('确定要同步数据么?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          this.$router.push({name: "shop"});
+        }).catch(() => {});
+      },
+      switchShop() {
+        this.$confirm('确定要切换店铺么?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          this.$router.push({name: "shop"});
+        }).catch(() => {});
+      },
       exitBtnHandle() {
-        this.$confirm('将要退出注销用户?', '提示', {
+        this.$confirm('确定要退出注销用户么?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("username");
           this.$router.push({name: "login"});
-        }).catch(() => {
-        });
-
+        }).catch(() => {});
       }
     }
   }
@@ -92,7 +113,32 @@
     background-repeat: no-repeat;
   }
   .user{
+    margin-right: 30px;
     cursor: pointer;
+    position: relative;
+  }
+  .user:hover .userShow{
+    display: inline-block;
+  }
+  .userShow{
+    display: none;
+    position: absolute;
+    top: 17px;
+    left: 0px;
+    background: rgba(0,0,0,0.3);
+    width: 134px;
+    text-align: center;
+    z-index: 10;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .userShow a{
+    display: block;
+    height: 44px;
+    line-height: 44px;
+  }
+  .userShow a:hover{
+    background: rgba(0,0,0,0.7);
   }
   .loguser{
     margin-right: 10%;
@@ -100,6 +146,7 @@
   .user-icon{
     margin-right: 10px;
   }
+  /*ele样式*/
   .el-menu--dark{
     background-color: #1f74f2;
   }
