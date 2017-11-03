@@ -16,6 +16,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 // 登录
 export const loginApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=user&a=login", Qs.stringify(params));
+// 获取提醒信息列表
+export const remindMessageApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=message&a=roiMessageList", Qs.stringify(params));
 // 店铺列表页
 export const shopListApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=shop&a=infoList", Qs.stringify(params));
 // 店铺允许使用系统权限

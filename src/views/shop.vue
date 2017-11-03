@@ -15,9 +15,17 @@
       border
       style="width: 100%">
       <el-table-column
+        width="300"
         label="卖家昵称">
         <template scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.nick }}</span>
+          <span style="margin-left: 10px">
+            <span class="remind">
+              <el-badge :value="12" class="item">
+              <el-button type="primary" size="small" @click="remindBoole(scope.$index, scope.row)">提醒</el-button>
+            </el-badge>
+            </span>
+            {{ scope.row.nick }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -77,24 +85,113 @@
         :page-count="tablePageInfo.pageNum">
       </el-pagination>
     </div>
+    <el-dialog title="提醒" :visible.sync="remind.remindBoole">
+      <el-tabs v-model="remind.activeName" @tab-click="">
+        <el-tab-pane label="未处理" name="first">
+          <el-table
+            :data="remind.data.unprocessed"
+            v-loading.body="listLoading"
+            border
+            style="width: 100%">
+            <el-table-column
+              align="center"
+              label="时间">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="计划">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.campaign_name}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="单元">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.adgroup_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="信息">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.info }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template scope="scope">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="clickRemindButton(scope.$index, scope.row)">处理</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="已处理" name="second">
+          <el-table
+            :data="remind.data.processed"
+            v-loading.body="listLoading"
+            border
+            style="width: 100%">
+            <el-table-column
+              align="center"
+              label="时间">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="计划">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.campaign_name}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="单元">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.adgroup_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="信息">
+              <template scope="scope">
+                <span style="margin-left: 10px">{{ scope.row.info }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import select from '../components/select/select.vue'
   import serach from '../components/serach/serach.vue'
-  import {shopListApi, shopLoginApi, shopLimitsApi} from './../fetch/API'
+  import {shopListApi, shopLoginApi, shopLimitsApi, remindMessageApi} from './../fetch/API'
   export default {
     data() {
       return {
-        tableData: [{
-          nick: "英语二油条",
-          consultant: "林坚恋",
-          intell_del_num: "2",
-          put_on_campaign_num: "10",
-          status: "允许",
-          trust_num: 0
-        }],
+        /*提醒*/
+        remind:{
+          /*查看提醒*/
+          remindBoole: false,
+          /*提醒选项卡默认显示页*/
+          activeName: 'second',
+          /*数据列表*/
+          data: {
+            processed: [],
+            unprocessed: []
+          }
+        },
+        tableData: [],
         tablePageInfo:{
           pageNum:'',
           curPage:1,
@@ -125,6 +222,26 @@
         let params = {page:curPage};
         this.tablePageInfo.curPage = curPage;
         this.refreshTableData(params)
+      },
+      remindBoole(index, row) {
+        let params = {nick:row.nick};
+        console.log(params);
+        remindMessageApi(params).then(res => {console.log(res.data.code);console.log(res.data.data);
+          if(res.data.code == 0){
+            this.remind.data = res.data.data
+          }
+        })
+        return this.remind.remindBoole = true
+      },
+      clickRemindButton(index, row){
+        let id = row.id,nick = row.nick;
+        remindMessageApi({id:id}).then(res => {
+          if(res.data.code == 0){
+            var data = this.remind.data.unprocessed[index];
+            this.remind.data.unprocessed.splice(index,1);
+            this.remind.data.processed.unshift(data);
+          }
+        })
       },
       handleQianniu(index, row) {
         console.log(index, row);
