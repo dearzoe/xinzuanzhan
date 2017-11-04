@@ -1,17 +1,18 @@
 <template>
   <div class="shop-tab">
     <div class="select">
-      <v-select></v-select>
+      <v-select :options="selects.consultants" @changeList="selectAjaxConsultants"></v-select>
     </div>
     <div class="select">
-      <v-select></v-select>
+      <v-select :options="selects.selectOptions" @changeList="selectAjaxSelectOptions"></v-select>
     </div>
     <div class="serach">
-      <v-serach></v-serach>
+      <v-serach :serach="selects.serachValue"  @changeList="serachValueAjax"></v-serach>
     </div>
     <el-table
       :data="tableData"
       v-loading.body="listLoading"
+      stripe
       border
       style="width: 100%">
       <el-table-column
@@ -20,7 +21,7 @@
         <template scope="scope">
           <span style="margin-left: 10px">
             <span class="remind">
-              <el-badge :value="12" class="item">
+              <el-badge :value="scope.row.count" class="item">
               <el-button type="primary" size="small" @click="remindBoole(scope.$index, scope.row)">提醒</el-button>
             </el-badge>
             </span>
@@ -86,11 +87,10 @@
       </el-pagination>
     </div>
     <el-dialog title="提醒" :visible.sync="remind.remindBoole">
-      <el-tabs v-model="remind.activeName" @tab-click="">
+      <el-tabs v-model="remind.activeName" v-loading.body="remind.listLoading" @tab-click="">
         <el-tab-pane label="未处理" name="first">
           <el-table
             :data="remind.data.unprocessed"
-            v-loading.body="listLoading"
             border
             style="width: 100%">
             <el-table-column
@@ -134,7 +134,7 @@
         <el-tab-pane label="已处理" name="second">
           <el-table
             :data="remind.data.processed"
-            v-loading.body="listLoading"
+            v-loading.body="remind.listLoading"
             border
             style="width: 100%">
             <el-table-column
@@ -176,15 +176,33 @@
   import select from '../components/select/select.vue'
   import serach from '../components/serach/serach.vue'
   import {shopListApi, shopLoginApi, shopLimitsApi, remindMessageApi} from './../fetch/API'
+
   export default {
     data() {
       return {
-        /*提醒*/
-        remind:{
+        selects:{
+          selectOptions: {
+            selected:2,
+            options:[
+              {value: 2, label: "使用系统（全部）"},
+              {value: 1, label: "允许"},
+              {value: 0, label: "不允许"}]
+          },
+          consultants:{
+            selected:'all',
+            options:[
+              {value:'all', label:'所有'}
+              ]
+          },
+          //搜索值
+          serachValue:''
+        },
+        remind: {
+          listLoading: true,
           /*查看提醒*/
           remindBoole: false,
           /*提醒选项卡默认显示页*/
-          activeName: 'second',
+          activeName: 'first',
           /*数据列表*/
           data: {
             processed: [],
@@ -192,10 +210,10 @@
           }
         },
         tableData: [],
-        tablePageInfo:{
-          pageNum:'',
-          curPage:1,
-          perPage:18
+        tablePageInfo: {
+          pageNum: '',
+          curPage: 1,
+          perPage: 18
         }
       }
     },
@@ -211,35 +229,59 @@
         this.listLoading = true;
         this.refreshTableData()
       },
+      selectAjaxConsultants(val) {
+        this.selects.consultants.selected = val;
+        let params = {page: this.tablePageInfo.curPage, consultant:val};
+        this.refreshTableData(params)
+      },
+      selectAjaxSelectOptions(val) {
+        this.selects.selectOptions.selected = val;
+        let params = {page: this.tablePageInfo.curPage, status:val};
+        this.refreshTableData(params)
+      },
+      serachValueAjax(val) {
+        let params = {page: this.tablePageInfo.curPage, condition:val};
+        this.refreshTableData(params)
+      },
       handleEdit(index, nick) {
-        shopLoginApi({nick:nick}).then(res => {
-          if(res.status == 200){
-            this.$router.push({ name: "index" });
+        shopLoginApi({nick: nick}).then(res => {
+          if (res.status == 200) {
+            this.$router.push({name: "index", params:{nick: nick}});
           }
         })
       },
       pageChange(curPage) {
-        let params = {page:curPage};
+        /*搜索名*/
+        let serachValue = this.selects.serachValue,
+        /*是否允许权限*/
+          selectOptions = this.selects.selectOptions.selected,
+        /*顾问名*/
+          consultants = this.selects.consultants.selected;
+        let params = {page: curPage, condition: serachValue,status:selectOptions,consultant:consultants};
         this.tablePageInfo.curPage = curPage;
         this.refreshTableData(params)
       },
       remindBoole(index, row) {
-        let params = {nick:row.nick};
-        console.log(params);
-        remindMessageApi(params).then(res => {console.log(res.data.code);console.log(res.data.data);
-          if(res.data.code == 0){
-            this.remind.data = res.data.data
+        this.remind.listLoading = true;
+        let params = {nick: row.nick};
+        remindMessageApi(params).then(res => {
+          if (res.data.code == 0) {
+            this.remind.data = res.data.data;
+            this.remind.listLoading = false;
           }
-        })
+        });
         return this.remind.remindBoole = true
       },
-      clickRemindButton(index, row){
-        let id = row.id,nick = row.nick;
-        remindMessageApi({id:id}).then(res => {
-          if(res.data.code == 0){
+      clickRemindButton(index, row) {
+        let id = row.id, nick = row.nick;
+        remindMessageApi({id: id}).then(res => {
+          if (res.data.code == 0) {
             var data = this.remind.data.unprocessed[index];
-            this.remind.data.unprocessed.splice(index,1);
+            this.remind.data.unprocessed.splice(index, 1);
             this.remind.data.processed.unshift(data);
+            this.$message.success("处理成功！")
+          } else {
+            this.$message.error("处理失败！")
           }
         })
       },
@@ -254,8 +296,8 @@
         }).then(() => {
           let showStatus = row.status == "允许" ? "不允许" : "允许";
           let params = {nick: row.nick, status: showStatus == "允许" ? 1 : 0};
-          shopLimitsApi(params).then(res => {console.log(res)
-            if(res.data.code == 0){
+          shopLimitsApi(params).then(res => {
+            if (res.data.code == 0) {
               row.status = showStatus;
               this.$notify({
                 message: '修改成功!',
@@ -275,13 +317,20 @@
       },
       refreshTableData(params) {
         shopListApi(params).then(res => {
-          if(!params){
-            let total = res.data.data.info.total,//总条数
-              per_page = res.data.data.info.per_page,//每页显示
-              current_page = res.data.data.info.current_page;//当前页
+          if (!params) {
+            let info = res.data.data.info,
+              total = info.total,//总条数
+              per_page = info.per_page,//每页显示
+              current_page = info.current_page,//当前页
+              consultants = res.data.data.consultants;//顾问集合
+            /*分页相关*/
             this.tablePageInfo.perPage = per_page;
             this.tablePageInfo.curPage = current_page;
-            this.tablePageInfo.pageNum = Math.ceil(total/per_page);
+            this.tablePageInfo.pageNum = Math.ceil(total / per_page);
+            /*顾问下拉相关*/
+            for(var key in consultants){
+              this.selects.consultants.options.push({value:key, label:consultants[key]})
+            }
           }
           this.tableData = res.data.data.info.data;
           this.listLoading = false;

@@ -602,7 +602,7 @@
           // 如果开关打开则加载数据
           if(sw==true){
             page++;
-            let params = {nick: "英语二油条",init: 1, page:page, rows:20};
+            let params = {nick: this.$route.params.nick,init: 1, page:page, rows:20};
             // 将开关关闭
             sw = false;
             pricingApi(params).then(function(res){console.log(res);
@@ -632,7 +632,7 @@
     methods: {
       getList() {
         this.listLoading = true;
-        let params = {nick: "英语二油条",init: 1, rows:20};
+        let params = {nick: this.$route.params.nick,init: 1, rows:20};
         pricingApi(params).then(res => {
           const items = res.data.data.lists.lists;
           this.lists = items.map(v => {

@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top: 15px;">
-    <el-input placeholder="请输入内容" v-model="input5">
-      <el-button slot="append" icon="search"></el-button>
+    <el-input placeholder="请输入内容" v-model="serach">
+      <el-button slot="append" icon="search" @click="serachHandle"></el-button>
     </el-input>
   </div>
 </template>
@@ -10,8 +10,13 @@
   export default {
     data() {
       return {
-        input5: '',
-        select: ''
+        serach: '',
+      }
+    },
+    props:['serach'],
+    methods: {
+      serachHandle() {
+        this.$emit('changeList',this.serach);
       }
     }
   }
