@@ -14,16 +14,16 @@
       <el-col :span="8"><div class="grid-content bg-purple-light">&nbsp;</div></el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple button-group-right">
-          <el-button type="primary" v-waves :plain="true">7天</el-button>
-          <el-button type="primary" v-waves :plain="true">3天</el-button>
-          <el-button type="primary" v-waves :plain="true">今天</el-button>
+          <el-button type="primary" v-waves :plain="true" @click="changeEffect(7)">7天</el-button>
+          <el-button type="primary" v-waves :plain="true" @click="changeEffect(3)">3天</el-button>
+          <el-button type="primary" v-waves :plain="true" @click="changeEffect(1)">今天</el-button>
         </div>
       </el-col>
     </el-row>
     <el-row class="button-group">
       <el-col :span="18">
         <div class="grid-content bg-purple">
-          <v-select></v-select>
+          <v-select :selectGroup="selectGroupData" @selectGroupClick="selectGroupClick"></v-select>
         </div>
       </el-col>
       <el-col :span="6">
@@ -526,6 +526,8 @@
         allShop: 'first',
         /*搜索内容*/
         planName: '',
+        /*统计天数*/
+        effect: '',
         setTrustTabAry: ['CPC', 'ROI'],
         setTrustTab: 'CPC',
         /*托管日志*/
@@ -564,21 +566,65 @@
           city: '普陀区',
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
+        }],
+        selectGroupData:{
+          trust_status_list: [{
+            value: '-',
+            label: '全部管理状态'
+          },
+            {
+              value: '2',
+              label: '调价托管'
+            },
+            {
+              value: '1',
+              label: '店主管理'
+            }],
+          trust_target_list: [{
+            value: '-',
+            label: '托管目的'
+          },
+            {
+              value: '2',
+              label: '控制ROI'
+            },
+            {
+              value: '1',
+              label: '控制CPC'
+            }],
+          campaign_status_list: [{
+            value: '-',
+            label: '全部状态'
+          },
+            {
+              value: '1',
+              label: '正在投放'
+            },
+            {
+              value: '0',
+              label: '暂停投放'
+            },
+            {
+              value: '9',
+              label: '结束投放'
+            }],
+          pay_type_list: [{
+            value: '-',
+            label: '所有付费方式'
+          },
+            {
+              value: '8',
+              label: '按点击付费（CPC）'
+            },
+            {
+              value: '2',
+              label: '按展现付费（CPM）'
+            }],
+          trust_status_list_value: '-',
+          trust_target_list_value: '-',
+          campaign_status_list_value: '-',
+          pay_type_list_value: '-',
+        }
       }
     },
     components: {
@@ -589,6 +635,8 @@
       waves
     },
     created() {
+      /*nickName*/
+      this.$emit('changeNickName', this.$route.params.nick);
       this.getList();
       // 缓存指针
       let _this = this;
@@ -630,19 +678,11 @@
       })
     },
     methods: {
+      /*初始化获取列表数据*/
       getList() {
         this.listLoading = true;
         let params = {nick: this.$route.params.nick,init: 1, rows:20};
-        pricingApi(params).then(res => {
-          const items = res.data.data.lists.lists;
-          this.lists = items.map(v => {
-            this.$set(v, 'edit', false);
-            return v
-          });
-          this.statistic = res.data.data.statistic;
-          this.campaign_status_list = res.data.data.campaign_status_list;
-          this.listLoading = false;
-        })
+        this.sendAjax(params)
       },
       /*列表checkbox*/
       handleSelectionChange(val) {
@@ -667,6 +707,52 @@
       /*托管设置radio按钮*/
       handleRadio(v) {
         console.log(v);
+      },
+      /*select下拉搜索*/
+      selectGroupClick(val) {
+        for(var key in val){
+          this.selectGroupData[key][key+"_value"] = val[key]
+        }
+        this.listLoading = true;
+        let params = {
+          nick: this.$route.params.nick,
+          trust_status:this.selectGroupData.trust_status_list_value,
+          trust_target:this.selectGroupData.trust_target_list_value,
+          campaign_status:this.selectGroupData.campaign_status_list_value,
+          pay_type:this.selectGroupData.pay_type_list_value,
+          effect:this.effect,
+          rows:20
+        };
+        this.sendAjax(params);
+      },
+      changeEffect(val) {
+        this.effect = val;
+        this.listLoading = true;
+        let params = {
+          nick: this.$route.params.nick,
+          trust_status:this.selectGroupData.trust_status_list_value,
+          trust_target:this.selectGroupData.trust_target_list_value,
+          campaign_status:this.selectGroupData.campaign_status_list_value,
+          pay_type:this.selectGroupData.pay_type_list_value,
+          effect:this.effect,
+          rows:20
+        };
+        this.sendAjax(params);
+      },
+      /*发送请求公用方法*/
+      sendAjax(params) {
+        pricingApi(params).then(res => {
+          const items = res.data.data.lists.lists;
+          this.lists = items.map(v => {
+            this.$set(v, 'edit', false);
+            return v
+          });
+          if(params.init){
+            this.statistic = res.data.data.statistic;
+            this.campaign_status_list = res.data.data.campaign_status_list;
+          }
+          this.listLoading = false;
+        })
       }
     }
   }

@@ -249,7 +249,7 @@
   import SpreadWapper from './common/SpreadWapper.vue'
   import SelectGroup from './common/SelectGroup.vue'
   import waves from '@/directive/waves/index.js' // 水波纹指令
-  import {pricingApi} from "./../../fetch/API"
+  import {intellDelApi} from "./../../fetch/API"
   export default {
     data() {
       return {
@@ -342,7 +342,7 @@
             let params = {nick: "英语二油条",init: 1, page:page};
             // 将开关关闭
             sw = false;
-            pricingApi(params).then(function(res){console.log(res);
+            intellDelApi(params).then(function(res){console.log(res);
               let code = res.data.code;
               if(code == 0){
                 if(_this.lists.length < res.data.data.lists.total){
@@ -370,7 +370,7 @@
       getList() {
         this.listLoading = true;
         let params = {nick: "英语二油条",init: 1};
-        pricingApi(params).then(res => {console.log(res);
+        intellDelApi(params).then(res => {console.log(res);
           const items = res.data.data.lists.lists;
           this.lists = items.map(v => {
             this.$set(v, 'edit', false);

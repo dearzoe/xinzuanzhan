@@ -13,7 +13,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // 		return response;
 // 	}
 // );
-
 // 登录
 export const loginApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=user&a=login", Qs.stringify(params));
 // 获取提醒信息列表
@@ -24,7 +23,9 @@ export const shopListApi = params => axios.post("public/index.php/api/portal/cal
 export const shopLimitsApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=shop&a=system", Qs.stringify(params));
 // 店铺登录(v0.12#1218-本地)
 export const shopLoginApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=shopLogin", Qs.stringify(params));
-// 智能调价-数据列表(v0.12#1218-本地)
+// 投放管理-智能调价
 export const pricingApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=pricing", Qs.stringify(params));
-// 智能调价-数据列表(v0.12#1218-本地)
+// 投放管理-智能删除
+export const intellDelApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=intellDel", Qs.stringify(params));
+// 投放管理-投放管理
 export const campaignLaunchApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaignLaunch&a=campaignList", Qs.stringify(params));
