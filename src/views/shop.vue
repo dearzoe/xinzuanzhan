@@ -7,7 +7,7 @@
       <v-select :options="selects.selectOptions" @changeList="selectAjaxSelectOptions"></v-select>
     </div>
     <div class="serach">
-      <v-serach :serach="selects.serachValue"  @changeList="serachValueAjax"></v-serach>
+      <v-serach :serachProps="selects.serachValue"  @changeList="serachValueAjax"></v-serach>
     </div>
     <el-table
       :data="tableData"
@@ -211,7 +211,7 @@
         },
         tableData: [],
         tablePageInfo: {
-          pageNum: '',
+          pageNum: 0,
           curPage: 1,
           perPage: 18
         }
