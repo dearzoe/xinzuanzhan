@@ -120,5 +120,4 @@
         font-size: large;
         font-weight: bold;
     }
-
 </style>

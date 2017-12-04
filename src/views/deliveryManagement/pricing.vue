@@ -458,13 +458,13 @@
 </template>
 
 <script>
-  import SpreadWapper from './common/SpreadWapper.vue'
-  import SelectGroup from './common/SelectGroup.vue'
-  import waves from '@/directive/waves/index.js' // 水波纹指令
-  import {pricingApi} from "./../../fetch/API"
-  export default {
-    data() {
-      return {
+import SpreadWapper from './common/SpreadWapper.vue'
+import SelectGroup from './common/SelectGroup.vue'
+import waves from '@/directive/waves/index.js' // 水波纹指令
+import {pricingApi} from "./../../fetch/API"
+export default {
+data() {
+    return {
         listLoading: true,
         /*托管日志*/
         setTrustLog: false,
@@ -478,47 +478,47 @@
         campaign_status_list: {},
         /*修改预算*/
         reviseBudget: {
-          name1:1,
-          name2:2
+            name1:1,
+            name2:2
         },
         /*列表数据*/
         lists: [],
         /*列表checkbox*/
         multipleSelection: [],
         priceTrustForm: {
-          radios:'cpc'
+           radios:'cpc'
         },
         ruleFormCPC: {
-          budget: 0,
-          dawn_ratio: 0.1,
-          morning_ratio: 0.3,
-          noor_ratio: 0.3,
-          night_ratio: 0.3,
-          max_incre: 20,
-          time_space: 1,
-          real_time_space: 5,
-          history_watch: 7,
-          effect_type: 1,
-          cpc_max_price: 3,
-          cpc_min_price: 0.2,
-          cpm_max_price: 300,
-          cpm_min_price: 10
+            budget: 0,
+            dawn_ratio: 0.1,
+            morning_ratio: 0.3,
+            noor_ratio: 0.3,
+            night_ratio: 0.3,
+            max_incre: 20,
+            time_space: 1,
+            real_time_space: 5,
+            history_watch: 7,
+            effect_type: 1,
+            cpc_max_price: 3,
+            cpc_min_price: 0.2,
+            cpm_max_price: 300,
+            cpm_min_price: 10
         },
         ruleFormROI: {
-          budget: 300,
-          dawn_ratio: 0.1,
-          morning_ratio: 0.3,
-          noor_ratio: 0.3,
-          night_ratio: 0.3,
-          max_incre: 20,
-          time_space: 1,
-          real_time_space: 5,
-          history_watch: 7,
-          effect_type: 2,
-          cpc_max_price: 3,
-          cpc_min_price: 0.2,
-          cpm_max_price: 300,
-          cpm_min_price: 10
+            budget: 300,
+            dawn_ratio: 0.1,
+            morning_ratio: 0.3,
+            noor_ratio: 0.3,
+            night_ratio: 0.3,
+            max_incre: 20,
+            time_space: 1,
+            real_time_space: 5,
+            history_watch: 7,
+            effect_type: 2,
+            cpc_max_price: 3,
+            cpc_min_price: 0.2,
+            cpm_max_price: 300,
+            cpm_min_price: 10
         },
         /*全店推广显示信息*/
         statistic:{},
@@ -568,196 +568,195 @@
           zip: 200333
         }],
         selectGroupData:{
-          trust_status_list: [{
-            value: '-',
-            label: '全部管理状态'
-          },
-            {
-              value: '2',
-              label: '调价托管'
+            trust_status_list: [{
+                value: '-',
+                label: '全部管理状态'
             },
             {
-              value: '1',
-              label: '店主管理'
+                value: '2',
+                label: '调价托管'
+            },
+            {
+                value: '1',
+                label: '店主管理'
             }],
-          trust_target_list: [{
-            value: '-',
-            label: '托管目的'
-          },
-            {
-              value: '2',
-              label: '控制ROI'
+            trust_target_list: [{
+                value: '-',
+                label: '托管目的'
             },
             {
-              value: '1',
-              label: '控制CPC'
+                value: '2',
+                label: '控制ROI'
+            },
+            {
+                value: '1',
+                label: '控制CPC'
             }],
-          campaign_status_list: [{
-            value: '-',
-            label: '全部状态'
-          },
-            {
-              value: '1',
-              label: '正在投放'
+            campaign_status_list: [{
+                value: '-',
+                label: '全部状态'
             },
             {
-              value: '0',
-              label: '暂停投放'
+                value: '1',
+                label: '正在投放'
             },
             {
-              value: '9',
-              label: '结束投放'
+                value: '0',
+                label: '暂停投放'
+            },
+            {
+                value: '9',
+                label: '结束投放'
             }],
-          pay_type_list: [{
-            value: '-',
-            label: '所有付费方式'
-          },
-            {
-              value: '8',
-              label: '按点击付费（CPC）'
+            pay_type_list: [{
+                value: '-',
+                label: '所有付费方式'
             },
             {
-              value: '2',
-              label: '按展现付费（CPM）'
+                value: '8',
+                label: '按点击付费（CPC）'
+            },
+            {
+                value: '2',
+                label: '按展现付费（CPM）'
             }],
-          trust_status_list_value: '-',
-          trust_target_list_value: '-',
-          campaign_status_list_value: '-',
-          pay_type_list_value: '-',
+            trust_status_list_value: '-',
+            trust_target_list_value: '-',
+            campaign_status_list_value: '-',
+            pay_type_list_value: '-',
         }
-      }
-    },
+    }
+},
     components: {
-      'v-spread': SpreadWapper,
-      'v-select': SelectGroup
+        'v-spread': SpreadWapper,
+        'v-select': SelectGroup
     },
     directives: {
-      waves
+        waves
     },
     created() {
-      /*nickName*/
-      this.$emit('changeNickName', this.$route.params.nick);
-      this.getList();
-      // 缓存指针
-      let _this = this;
-      // 设置一个开关来避免重负请求数据
-      let sw = true;
-      //设置页数
-      let page = 1;
-      // 注册scroll事件并监听
-      window.addEventListener('scroll',function(){
-        if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
-          // 如果开关打开则加载数据
-          if(sw==true){
-            page++;
-            let params = {nick: this.$route.params.nick,init: 1, page:page, rows:20};
-            // 将开关关闭
-            sw = false;
-            pricingApi(params).then(function(res){console.log(res);
-            let code = res.data.code;
-              if(code == 0){
-                if(_this.lists.length < res.data.data.lists.total){
-                  _this.lists.push.apply(_this.lists, res.data.data.lists.lists);
-                  // 数据更新完毕，将开关打开
-                  sw = true;
-                  _this.$notify.success("下拉加载数据完毕");
-                }else{
-                  _this.$notify.success("没有更多数据");
-                  sw = false;
+        /*nickName*/
+        this.$emit('changeNickName', this.$route.params.nick);
+        this.getList();
+        // 缓存指针
+        let _this = this;
+        // 设置一个开关来避免重负请求数据
+        let sw = true;
+        //设置页数
+        let page = 1;
+        // 注册scroll事件并监听
+        window.addEventListener('scroll',function(){
+            if(document.documentElement.scrollTop + window.innerHeight >= document.body.offsetHeight) {
+                // 如果开关打开则加载数据
+                if(sw==true){
+                    page++;
+                    let params = {nick: this.$route.params.nick,init: 1, page:page, rows:20};
+                    // 将开关关闭
+                    sw = false;
+                    pricingApi(params).then(function(res){console.log(res);
+                    let code = res.data.code;
+                        if(code == 0){
+                            if(_this.lists.length < res.data.data.lists.total){
+                                _this.lists.push.apply(_this.lists, res.data.data.lists.lists);
+                                // 数据更新完毕，将开关打开
+                                sw = true;
+                                _this.$notify.success("下拉加载数据完毕");
+                            }else{
+                                _this.$notify.success("没有更多数据");
+                                sw = false;
+                            }
+
+                        }else{
+                            _this.$notify.error(res.data.msg);
+                        }
+
+                    }).catch(function(error){
+                      console.log(error);
+                    });
                 }
-
-              }else{
-                _this.$notify.error(res.data.msg);
-              }
-
-            }).catch(function(error){
-              console.log(error);
-            });
-          }
-        }
-      })
+            }
+        })
     },
     methods: {
-      /*初始化获取列表数据*/
-      getList() {
-        this.listLoading = true;
-        let params = {nick: this.$route.params.nick,init: 1, rows:20};
-        this.sendAjax(params)
-      },
-      /*列表checkbox*/
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      /*实际预算单元格编辑*/
-      cellClick(row) {
-        this.reviseBudgetBoole = true;
-        console.log(row);
-      },
-      /*实际预算单元格编辑（保存）*/
-      handleIconClick(scorp) {
-      },
-      /*计划名搜索*/
-      planSerachClick(ev) {
-        console.log(ev);
-      },
-      /*托管设置*/
-      handleClickRuleForm(tab, event) {
-        this.setTrustTab = tab.name;
-      },
-      /*托管设置radio按钮*/
-      handleRadio(v) {
-        console.log(v);
-      },
-      /*select下拉搜索*/
-      selectGroupClick(val) {
-        for(var key in val){
-          this.selectGroupData[key][key+"_value"] = val[key]
+        /*初始化获取列表数据*/
+        getList() {
+            this.listLoading = true;
+            let params = {nick: this.$route.params.nick,init: 1, rows:20};
+            this.sendAjax(params)
+        },
+        /*列表checkbox*/
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        /*实际预算单元格编辑*/
+        cellClick(row) {
+            this.reviseBudgetBoole = true;
+            console.log(row);
+        },
+        /*实际预算单元格编辑（保存）*/
+        handleIconClick(scorp) {
+        },
+        /*计划名搜索*/
+        planSerachClick(ev) {
+            console.log(ev);
+        },
+        /*托管设置*/
+        handleClickRuleForm(tab, event) {
+            this.setTrustTab = tab.name;
+        },
+        /*托管设置radio按钮*/
+        handleRadio(v) {
+            console.log(v);
+        },
+        /*select下拉搜索*/
+        selectGroupClick(val) {
+            for(var key in val){
+                this.selectGroupData[key][key+"_value"] = val[key]
+            }
+            this.listLoading = true;
+            let params = {
+                nick: this.$route.params.nick,
+                trust_status:this.selectGroupData.trust_status_list_value,
+                trust_target:this.selectGroupData.trust_target_list_value,
+                campaign_status:this.selectGroupData.campaign_status_list_value,
+                pay_type:this.selectGroupData.pay_type_list_value,
+                effect:this.effect,
+                rows:20
+            };
+            this.sendAjax(params);
+        },
+        changeEffect(val) {
+            this.effect = val;
+            this.listLoading = true;
+            let params = {
+                nick: this.$route.params.nick,
+                trust_status:this.selectGroupData.trust_status_list_value,
+                trust_target:this.selectGroupData.trust_target_list_value,
+                campaign_status:this.selectGroupData.campaign_status_list_value,
+                pay_type:this.selectGroupData.pay_type_list_value,
+                effect:this.effect,
+                rows:20
+            };
+            this.sendAjax(params);
+        },
+        /*发送请求公用方法*/
+        sendAjax(params) {
+            pricingApi(params).then(res => {
+                const items = res.data.data.lists.lists;
+                this.lists = items.map(v => {
+                    this.$set(v, 'edit', false);
+                    return v
+                });
+                if(params.init){
+                    this.statistic = res.data.data.statistic;
+                    this.campaign_status_list = res.data.data.campaign_status_list;
+                }
+                this.listLoading = false;
+            })
         }
-        this.listLoading = true;
-        let params = {
-          nick: this.$route.params.nick,
-          trust_status:this.selectGroupData.trust_status_list_value,
-          trust_target:this.selectGroupData.trust_target_list_value,
-          campaign_status:this.selectGroupData.campaign_status_list_value,
-          pay_type:this.selectGroupData.pay_type_list_value,
-          effect:this.effect,
-          rows:20
-        };
-        this.sendAjax(params);
-      },
-      changeEffect(val) {
-        this.effect = val;
-        this.listLoading = true;
-        let params = {
-          nick: this.$route.params.nick,
-          trust_status:this.selectGroupData.trust_status_list_value,
-          trust_target:this.selectGroupData.trust_target_list_value,
-          campaign_status:this.selectGroupData.campaign_status_list_value,
-          pay_type:this.selectGroupData.pay_type_list_value,
-          effect:this.effect,
-          rows:20
-        };
-        this.sendAjax(params);
-      },
-      /*发送请求公用方法*/
-      sendAjax(params) {
-        pricingApi(params).then(res => {
-          const items = res.data.data.lists.lists;
-          this.lists = items.map(v => {
-            this.$set(v, 'edit', false);
-            return v
-          });
-          if(params.init){
-            this.statistic = res.data.data.statistic;
-            this.campaign_status_list = res.data.data.campaign_status_list;
-          }
-          this.listLoading = false;
-        })
-      }
     }
-  }
+}
 </script>
-
 <style scoped lang="less" type="text/less">
   .pricing-tab{
     margin: 10px 10% 10px;

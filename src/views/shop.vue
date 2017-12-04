@@ -1,5 +1,7 @@
 <template>
-  <div class="shop-tab">
+  <div>
+      <v-nav></v-nav>
+      <div class="shop-tab">
     <div class="select">
       <v-select :options="selects.consultants" @changeList="selectAjaxConsultants"></v-select>
     </div>
@@ -22,8 +24,8 @@
           <span style="margin-left: 10px">
             <span class="remind">
               <el-badge :value="scope.row.count" class="item">
-              <el-button type="primary" size="small" @click="remindBoole(scope.$index, scope.row)">提醒</el-button>
-            </el-badge>
+                <el-button type="primary" size="small" @click="remindBoole(scope.$index, scope.row)">提醒</el-button>
+              </el-badge>
             </span>
             {{ scope.row.nick }}
           </span>
@@ -170,17 +172,20 @@
       </el-tabs>
     </el-dialog>
   </div>
+  </div>
 </template>
 
 <script>
   import select from '../components/select/select.vue'
   import serach from '../components/serach/serach.vue'
+  import ShopNav from '../components/common/ShopNav.vue'
   import {shopListApi, shopLoginApi, shopLimitsApi, remindMessageApi} from './../fetch/API'
 
   export default {
     data() {
       return {
         selects:{
+          /*搜索权限*/
           selectOptions: {
             selected:2,
             options:[
@@ -188,13 +193,14 @@
               {value: 1, label: "允许"},
               {value: 0, label: "不允许"}]
           },
+          /*顾问集合*/
           consultants:{
             selected:'all',
             options:[
               {value:'all', label:'所有'}
               ]
           },
-          //搜索值
+          /*搜索input*/
           serachValue:''
         },
         remind: {
@@ -214,7 +220,8 @@
           pageNum: 0,
           curPage: 1,
           perPage: 18
-        }
+        },
+        NavMenu: false
       }
     },
     created() {
@@ -222,27 +229,33 @@
     },
     components: {
       "v-select": select,
-      "v-serach": serach
+      "v-serach": serach,
+      "v-nav": ShopNav
     },
     methods: {
+      /*获取店铺列表*/
       getList() {
         this.listLoading = true;
         this.refreshTableData()
       },
+      /*顾问筛选*/
       selectAjaxConsultants(val) {
         this.selects.consultants.selected = val;
         let params = {page: this.tablePageInfo.curPage, consultant:val};
         this.refreshTableData(params)
       },
+      /*显示权限筛选*/
       selectAjaxSelectOptions(val) {
         this.selects.selectOptions.selected = val;
         let params = {page: this.tablePageInfo.curPage, status:val};
         this.refreshTableData(params)
       },
+      /*搜索按钮*/
       serachValueAjax(val) {
         let params = {page: this.tablePageInfo.curPage, condition:val};
         this.refreshTableData(params)
       },
+      /*进入店铺*/
       handleEdit(index, nick) {
         shopLoginApi({nick: nick}).then(res => {
           if (res.status == 200) {
@@ -250,6 +263,7 @@
           }
         })
       },
+      /*分页*/
       pageChange(curPage) {
         /*搜索名*/
         let serachValue = this.selects.serachValue,
@@ -261,6 +275,7 @@
         this.tablePageInfo.curPage = curPage;
         this.refreshTableData(params)
       },
+      /*提醒按钮*/
       remindBoole(index, row) {
         this.remind.listLoading = true;
         let params = {nick: row.nick};
@@ -272,9 +287,10 @@
         });
         return this.remind.remindBoole = true
       },
+      /*处理按钮*/
       clickRemindButton(index, row) {
         let id = row.id, nick = row.nick;
-        remindMessageApi({id: id}).then(res => {
+        remindMessageApi({id: id, nick: nick}).then(res => {
           if (res.data.code == 0) {
             var data = this.remind.data.unprocessed[index];
             this.remind.data.unprocessed.splice(index, 1);
@@ -285,9 +301,11 @@
           }
         })
       },
+      /*进入千牛*/
       handleQianniu(index, row) {
         console.log(index, row);
       },
+      /*系统权限显示*/
       hiddenButton(index, row) {
         this.$confirm('将要操作系统入口设置?', '提示', {
           confirmButtonText: '确定',
@@ -315,6 +333,7 @@
           });
         });
       },
+      /*刷新店铺列表共用方法*/
       refreshTableData(params) {
         shopListApi(params).then(res => {
           if (!params) {
