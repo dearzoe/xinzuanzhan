@@ -29,3 +29,23 @@ export const pricingApi = params => axios.post("public/index.php/api/portal/call
 export const intellDelApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=index&a=intellDel", Qs.stringify(params));
 // 投放管理-投放管理
 export const campaignLaunchApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaignLaunch&a=campaignList", Qs.stringify(params));
+// 新建管理-新建计划-资源位列表接口
+export const adZoneApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=adZone", Qs.stringify(params));
+// 新建管理-新建计划-智能定向
+export const intellCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=intellCrowd", Qs.stringify(params));
+// 新建管理-新建计划-营销场景定向
+export const marketingCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=marketingCrowd", Qs.stringify(params));
+// 新建管理-新建计划-达摩盘定向
+export const dmpCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=dmpCrowd", Qs.stringify(params));
+// 新建管理-新建计划-访客定向
+export const visitorCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=visitorCrowd", Qs.stringify(params));
+// 新建管理-新建计划-相似宝贝定向
+export const similarCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=similarCrowd", Qs.stringify(params));
+// 新建管理-新建计划-群体定向
+export const groupCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=groupCrowd", Qs.stringify(params));
+// 新建管理-新建计划-高级兴趣点定向
+export const advancedInterestCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=advancedInterestCrowd", Qs.stringify(params));
+// 新建管理-新建计划-行业店铺定向
+export const industryShopCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=industryShopCrowd", Qs.stringify(params));
+// 新建管理-新建计划-通投定向
+export const allCrowdApi = params => axios.post("public/index.php/api/portal/call?m=vue&c=campaign&a=allCrowd", Qs.stringify(params));
